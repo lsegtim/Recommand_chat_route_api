@@ -9,8 +9,7 @@ from fastapi import FastAPI, Request, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-# from chatbot import initialize_bot, get_response
-
+from chatbot import initialize_bot, get_response_chatbot, hey
 
 # show all columns
 pd.set_option('display.max_columns', None)
@@ -41,9 +40,9 @@ data_length = 100000
 
 from recommander import get_rec
 
-# chatbot, exit_conditions = initialize_bot()
+chatbot, exit_conditions = initialize_bot()
 
-# print(get_response("Hey how are you?", chatbot))
+# print(get_response_chatbot("Hey how are you?", chatbot))
 
 
 class PyObjectId(ObjectId):
@@ -60,8 +59,6 @@ class PyObjectId(ObjectId):
     @classmethod
     def __modify_schema__(cls, field_schema):
         field_schema.update(type="string")
-
-
 
 
 # const userSchema = new Schema(
@@ -94,7 +91,6 @@ class UserModel(BaseModel):
 async def list_users():
     users = await db["users"].find().to_list(data_length)
     return users
-
 
 
 # const locationSchema = new Schema(
@@ -154,6 +150,7 @@ class LocationModel(BaseModel):
             }
         }
 
+
 # List all foods
 @app.get("/locations", response_description="List all locations", response_model=List[LocationModel])
 async def list_locations():
@@ -193,9 +190,51 @@ async def list_interaction():
     return feedbacks
 
 
+# Authentication: true
+# Username: nilupa
+# Password: nilupa123
+# Latitude: 6.828828828828828
+# Longitude: 79.86386702251839
+# Nearest Landmark: Okada Temple
+# Distance Radius Value: 303.5087719298246
+# Updated Data:
+# Time Restrictions: 7.00AM - 7.00PM
+# Accessibility: Choose an option
+# Historical Contexts: Rock Information
+# Hands-On Activities: Choose an option
+
+
+# class FeedbackModel(BaseModel):
+#     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+#     user_id: PyObjectId = Field(default_factory=PyObjectId)
+#     location_id: PyObjectId = Field(default_factory=PyObjectId)
+#     rating: str = Field(...)
+#     time_restrictions: str = Field(...)
+#     accessibility: str = Field(...)
+#     historical_context: str = Field(...)
+#     hands_on_activities: str = Field(...)
+#     planning: str = Field(...)
+#
+#     class Config:
+#         allow_population_by_field_name = True
+#         arbitrary_types_allowed = True
+#         json_encoders = {ObjectId: str}
+#         schema_extra = {
+#             "example": {
+#                 "_id": "60f4d5c5b5f0f0e5e8b2b5c9",
+#                 "user_id": "60f4d5c5b5f0f0e5e8b2b5c9",
+#                 "location_id": "60f4d5c5b5f0f0e5e8b2b5c9",
+#                 "rating": "view",
+#                 "time_restrictions": "7.00AM - 7.00PM",
+#                 "accessibility": "Wheelchair-accessible car park, Wheelchair-accessible entrance",
+#                 "historical_context": "Ancient Buddhist monastery",
+#                 "hands_on_activities": "Photography, Sightseeing, Relaxing",
+#                 "planning": "Choose an option"
+#             }
+#         }
+
 base_url = "http://localhost:8000/"
 save_path = "data/"
-
 
 
 # Load data
@@ -246,39 +285,22 @@ def aggregate_data():
     print(df.head())
 
 
-
-
-
 def process_data():
     # load csv
     df = pd.read_csv(save_path + "aggregate.csv")
-
-    # # convert dateOfBirth to age
-    # df['dateOfBirth'] = pd.to_datetime(df['dateOfBirth'])
-    # print(df['dateOfBirth'].head())
-    # # now date in 2002-08-30 format
-    # from datetime import datetime
-    #
-    # now = datetime.now().strftime("%Y-%m-%d")
-    #
-    # df['age'] = pd.to_datetime(now) - df['dateOfBirth']
-    # df.drop(columns=['dateOfBirth'], inplace=True)
-    #
-    # # convert age to years (int)
-    # df['age'] = df['age'].dt.days / 365
-    # df['age'] = df['age'].astype(int)
 
     # _id_x,email,password,username,_id_y,user_id,location_id,rating_x,_id,name,description,imageUrl,city,province,openTime,closeTime,latitude,longitude,accessibility,historical_context,hands_on_activities,planning,rating_y
 
     # drop _id_x, email, password, _id_y, user_id, location_id, _id, imageUrl
     df.drop(columns=['_id_x', 'email', 'password', 'username', '_id_y', '_id', 'imageUrl'],
             inplace=True)
-    #
+
     # # rename columns name_x -> food, name_y -> cuisine
     # df.rename(columns={'name_x': 'food_name', 'name_y': 'cuisine', 'food': 'food_id'}, inplace=True)
 
     # save to csv
     df.to_csv(save_path + "processed.csv", index=False)
+
 
 #
 # def analyze_data():
@@ -368,26 +390,17 @@ async def get_recommendation(user_id: str, num_of_rec: int = 5):
 # Load data and Recommendation
 @app.get("/recommendation-load/{user_id}")
 async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
-    orderItemWithQuantities = await list_order_items_with_quantities()
-    orders = await list_orders()
-    foods = await list_foods()
     users = await list_users()
-    feedbacks = await list_feedbacks()
-    food_categories = await list_food_categories()
+    interactions = await list_interaction()
+    locations = await list_locations()
 
-    orderItemWithQuantities = pd.DataFrame(orderItemWithQuantities)
-    orders = pd.DataFrame(orders)
-    foods = pd.DataFrame(foods)
     users = pd.DataFrame(users)
-    feedbacks = pd.DataFrame(feedbacks)
-    food_categories = pd.DataFrame(food_categories)
+    interactions = pd.DataFrame(interactions)
+    locations = pd.DataFrame(locations)
 
-    orderItemWithQuantities.to_csv(save_path + "orderItemWithQuantities.csv", index=False)
-    orders.to_csv(save_path + "orders.csv", index=False)
-    foods.to_csv(save_path + "foods.csv", index=False)
     users.to_csv(save_path + "users.csv", index=False)
-    feedbacks.to_csv(save_path + "feedbacks.csv", index=False)
-    food_categories.to_csv(save_path + "food_categories.csv", index=False)
+    interactions.to_csv(save_path + "interactions.csv", index=False)
+    locations.to_csv(save_path + "locations.csv", index=False)
 
     aggregate_data()
     process_data()
@@ -401,76 +414,113 @@ async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
     return {"recommendations": recommendation}
 
 
-# # Load data
-# @app.get("/load-data")
-# async def load_data(request: Request):
-#     orderItemWithQuantities = await list_order_items_with_quantities()
-#     orders = await list_orders()
-#     foods = await list_foods()
-#     users = await list_users()
-#     feedbacks = await list_feedbacks()
-#     food_categories = await list_food_categories()
-#
-#     orderItemWithQuantities = pd.DataFrame(orderItemWithQuantities)
-#     orders = pd.DataFrame(orders)
-#     foods = pd.DataFrame(foods)
-#     users = pd.DataFrame(users)
-#     feedbacks = pd.DataFrame(feedbacks)
-#     food_categories = pd.DataFrame(food_categories)
-#
-#     orderItemWithQuantities.to_csv(save_path + "orderItemWithQuantities.csv", index=False)
-#     orders.to_csv(save_path + "orders.csv", index=False)
-#     foods.to_csv(save_path + "foods.csv", index=False)
-#     users.to_csv(save_path + "users.csv", index=False)
-#     feedbacks.to_csv(save_path + "feedbacks.csv", index=False)
-#     food_categories.to_csv(save_path + "food_categories.csv", index=False)
-#
-#     aggregate_data()
-#     process_data()
-#     pre_process()
-#     update_log()
-#
-#     return {"status": "success"}
-#
-#
-# # Load data if last update is more than 1 hour and Recommendation
-# @app.get("/recommendation-load-update/{user_id}")
-# async def get_recommendation_load_update(user_id: str, num_of_rec: int = 5):
-#     if load_log():
-#         orderItemWithQuantities = await list_order_items_with_quantities()
-#         orders = await list_orders()
-#         foods = await list_foods()
-#         users = await list_users()
-#         feedbacks = await list_feedbacks()
-#         food_categories = await list_food_categories()
-#
-#         orderItemWithQuantities = pd.DataFrame(orderItemWithQuantities)
-#         orders = pd.DataFrame(orders)
-#         foods = pd.DataFrame(foods)
-#         users = pd.DataFrame(users)
-#         feedbacks = pd.DataFrame(feedbacks)
-#         food_categories = pd.DataFrame(food_categories)
-#
-#         orderItemWithQuantities.to_csv(save_path + "orderItemWithQuantities.csv", index=False)
-#         orders.to_csv(save_path + "orders.csv", index=False)
-#         foods.to_csv(save_path + "foods.csv", index=False)
-#         users.to_csv(save_path + "users.csv", index=False)
-#         feedbacks.to_csv(save_path + "feedbacks.csv", index=False)
-#         food_categories.to_csv(save_path + "food_categories.csv", index=False)
-#
-#         aggregate_data()
-#         process_data()
-#         pre_process()
-#         update_log()
-#
-#     # if num_of_rec:
-#     #     recommendation, user_stat = get_rec(user_id, num_of_rec=num_of_rec)
-#     # else:
-#     #     recommendation, user_stat = get_rec(user_id, num_of_rec=5)
-#     # return {"recommendations": recommendation}
+# Load data if last update is more than 1 hour and Recommendation
+@app.get("/recommendation-load-update/{user_id}")
+async def get_recommendation_load_update(user_id: str, num_of_rec: int = 5):
+    if load_log():
+        users = await list_users()
+        interactions = await list_interaction()
+        locations = await list_locations()
+
+        users = pd.DataFrame(users)
+        interactions = pd.DataFrame(interactions)
+        locations = pd.DataFrame(locations)
+
+        users.to_csv(save_path + "users.csv", index=False)
+        interactions.to_csv(save_path + "interactions.csv", index=False)
+        locations.to_csv(save_path + "locations.csv", index=False)
+
+        aggregate_data()
+        process_data()
+        # pre_process()
+        update_log()
+
+    if num_of_rec:
+        recommendation, user_stat = get_rec(user_id, num_of_rec=num_of_rec)
+    else:
+        recommendation, user_stat = get_rec(user_id, num_of_rec=5)
+    return {"recommendations": recommendation}
 
 
+
+
+# Chatbot
+@app.get("/chatbot/{message}")
+async def get_chatbot(message: str):
+    response = str(get_response_chatbot(message, chatbot))
+    return {"response": response}
+
+
+
+
+# user_id, latitude, longitude, radius, time restrictions, accessibility, historical contexts, hands-on activities, location id
+
+# Shortest Path
+@app.get("/shortest-path/{location_string}")
+async def get_shortest_path(location_string: str):
+    user_id = location_string.split(",")[0]
+    latitude = location_string.split(",")[1]
+    longitude = location_string.split(",")[2]
+    radius = location_string.split(",")[3]
+    start_time_restrictions = location_string.split(",")[4]
+    end_time_restrictions = location_string.split(",")[4].split("-")[1]
+    accessibility = location_string.split(",")[5]
+    historical_contexts = location_string.split(",")[6]
+    hands_on_activities = location_string.split(",")[7]
+    location_id = location_string.split(",")[8]
+
+    user_id = "60f4d5c5b5f0f0e5e8b2b5c9"
+    latitude = "6.828828828828828"
+    longitude = "79.86386702251839"
+    radius = "303.5087719298246"
+    start_time_restrictions = "7.00AM"
+    end_time_restrictions = "7.00PM"
+    accessibility = "Wheelchair-accessible car park, Wheelchair-accessible entrance"
+    historical_contexts = "Ancient Buddhist monastery"
+    hands_on_activities = "Photography, Sightseeing, Relaxing"
+    location_id = "60f4d5c5b5f0f0e5e8b2b5c9"
+
+    # users = await list_users()
+    # interactions = await list_interaction()
+    locations = await list_locations()
+
+    # users = pd.DataFrame(users)
+    # interactions = pd.DataFrame(interactions)
+    locations = pd.DataFrame(locations)
+
+    # users.to_csv(save_path + "users.csv", index=False)
+    # interactions.to_csv(save_path + "interactions.csv", index=False)
+    locations.to_csv(save_path + "locations.csv", index=False)
+
+    # aggregate_data()
+    # process_data()
+
+
+
+# List<Location> Locations1 = [
+#   Location(id: 0, place: "Colombo Galle Face Sri Lanka", lat: 6.9319, lon: 79.8478),
+#   Location(id: 1, place: "Kalaniya Temple Sri Lanka", lat: 6.9585, lon: 79.9580),
+#   Location(id: 2, place: "Mawanella Town Sri Lanka", lat: 7.2689, lon: 80.3418),
+#   Location(id: 3, place: "Temple of Tooth Sri Lanka", lat: 7.2921, lon: 80.6448),
+# ];
+
+# oyta meka ewanne
 #
+# Authentication: true
+# Username: nilupa
+# Password: nilupa123
+# Latitude: 6.828828828828828
+# Longitude: 79.86386702251839
+# Nearest Landmark: Okada Temple
+# Distance Radius Value: 303.5087719298246
+# Updated Data:
+# Time Restrictions: 7.00AM - 7.00PM
+# Accessibility: Choose an option
+# Historical Contexts: Rock Information
+# Hands-On Activities: Choose an option
+
+
+
 # # sentiment analysis
 # @app.get("/sentiment-analysis/{text}")
 # async def get_sentiment_analysis(text: str):
@@ -501,3 +551,64 @@ async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
 #         return {"status": "failed"}
 
 
+# user login model
+class UserLoginModel(BaseModel):
+    password: str = Field(...)
+    username: str = Field(...)
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+        schema_extra = {
+            "example": {
+                "password": "v^5BXk2C",
+                "username": "JustinDiaz"
+            }
+        }
+
+
+# login
+@app.post("/login")
+async def login(user: UserLoginModel = Body(...)):
+    try:
+        user = await db["users"].find_one({"username": user.username, "password": user.password})
+        if user:
+            return {"status": True, "user": user}
+        else:
+            return {"status": False, "message": "Invalid username or password"}
+    except Exception as e:
+        print(e)
+        return {"status": False, "message": "Invalid username or password"}
+
+
+# sign up model
+class UserSignUpModel(BaseModel):
+    email: str = Field(...)
+    password: str = Field(...)
+    username: str = Field(...)
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+        schema_extra = {
+            "example": {
+                "password": "v^5BXk2C",
+                "username": "JustinDiaz"
+            }
+        }
+
+
+# sign up
+@app.post("/sign-up")
+async def sign_up(user: UserSignUpModel = Body(...)):
+    try:
+        user = await db["users"].insert_one({"username": user.username, "password": user.password, "email": user.email})
+        if user:
+            return {"status": True, "user": user}
+        else:
+            return {"status": False, "message": "Invalid username or password"}
+    except Exception as e:
+        print(e)
+        return {"status": False, "message": "Invalid username or password"}

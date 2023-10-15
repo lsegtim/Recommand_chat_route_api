@@ -5,7 +5,7 @@ from itertools import combinations
 from geopy.distance import geodesic
 
 # Load Data
-df = pd.read_csv("shortest_path_test/m_locations_sp.csv")
+df = pd.read_csv("data/m_locations_sp.csv")
 
 
 # df = pd.read_csv("data/m_locations.csv")
@@ -22,17 +22,17 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 def generate_graph(current_location, df):
     # Step 1: Add current location to df
     df = pd.concat([df, pd.DataFrame([[0, 'Current Location', current_location[0], current_location[1]]],
-                                     columns=['id', 'name', 'latitude', 'longitude'])], ignore_index=True)
+                                     columns=['_id', 'name', 'latitude', 'longitude'])], ignore_index=True)
 
     # Step 3: Generate Graph
     G = nx.Graph()
 
     # Add nodes
     for _, row in df.iterrows():
-        G.add_node(row['id'], name=row['name'], latitude=row['latitude'], longitude=row['longitude'])
+        G.add_node(row['_id'], name=row['name'], latitude=row['latitude'], longitude=row['longitude'])
 
     # Add edges (fully connected)
-    locations = list(df['id'])
+    locations = list(df['_id'])
     for node1, node2 in combinations(locations, 2):
         lat1, lon1 = G.nodes[node1]['latitude'], G.nodes[node1]['longitude']
         lat2, lon2 = G.nodes[node2]['latitude'], G.nodes[node2]['longitude']
@@ -62,7 +62,7 @@ def generate_graph(current_location, df):
     if hamiltonian_cycle[-1] == hamiltonian_cycle[0]:
         hamiltonian_cycle.pop()
 
-    print(hamiltonian_cycle)
+    # print(hamiltonian_cycle)
 
     return G, hamiltonian_cycle
 
@@ -93,4 +93,6 @@ def plot_hamiltonian_cycle(G, hamiltonian_cycle):
 # current_location = (6.9271, 79.8612)
 # # destination_id = 17  # Replace with the actual ID from df
 # G, hamiltonian_cycle = generate_graph(current_location, df)
-# plot_hamiltonian_cycle(G, hamiltonian_cycle)
+# # plot_hamiltonian_cycle(G, hamiltonian_cycle)
+#
+# print(hamiltonian_cycle)

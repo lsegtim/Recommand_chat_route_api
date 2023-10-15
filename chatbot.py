@@ -1,7 +1,7 @@
 import spacy
 
 from chatterbot import ChatBot
-from chatterbot.trainers import ListTrainer
+from chatterbot.trainers import ListTrainer, ChatterBotCorpusTrainer
 
 
 def train_bot(chatbot):
@@ -16,6 +16,14 @@ def train_bot(chatbot):
     ])
 
     return chatbot
+
+# train chatbot with corpus
+def train_bot_corpus(chatbot):
+    corpus_trainer = ChatterBotCorpusTrainer(chatbot)
+    corpus_trainer.train("chatterbot.corpus.english")
+
+    return chatbot
+
 
 def initialize_bot():
 
@@ -37,8 +45,17 @@ def initialize_bot():
     return chatbot, exit_conditions
 
 
-def get_response(query, chatbot):
+def get_response_chatbot(query, chatbot):
+    # print("query: ", query)
+    print(chatbot.get_response(query))
     return chatbot.get_response(query)
+
+def hey(chatbot):
+    if not chatbot:
+        return "chatbot not initialized"
+    else:
+        return "chatbot initialized"
+
 
 
 # while True:
@@ -47,3 +64,16 @@ def get_response(query, chatbot):
 #         break
 #     else:
 #         print(f"🪴 {chatbot.get_response(query)}")
+
+
+# if __name__ == "__main__":
+#     chatbot, exit_conditions = initialize_bot()
+#     # print("Bot initialized")
+#     # chatbot = train_bot_corpus(chatbot)
+#     # print("Bot trained")
+#     while True:
+#         query = input("> ")
+#         if query in exit_conditions:
+#             break
+#         else:
+#             print(f"🪴 {chatbot.get_response(query)}")
