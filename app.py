@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from chatbot import initialize_bot, get_response_chatbot
+from filtering import filter_data, find_shortest_path
 
 # show all columns
 pd.set_option('display.max_columns', None)
@@ -613,105 +614,21 @@ def check_accessibility(row, accessibility_values, column_to_be_checked='accessi
 # Shortest Path
 @app.post("/shortest-path")
 async def get_shortest_path(shortest_path: ShortestPathModel = Body(...)):
-    # user_id = location_string.split(",")[0]
-    # latitude = location_string.split(",")[1]
-    # longitude = location_string.split(",")[2]
-    # radius = location_string.split(",")[3]
-    # start_time_restrictions = location_string.split(",")[4]
-    # end_time_restrictions = location_string.split(",")[4].split("-")[1]
-    # accessibility = location_string.split(",")[5]
-    # historical_contexts = location_string.split(",")[6]
-    # hands_on_activities = location_string.split(",")[7]
-    # location_id = location_string.split(",")[8]
-
-    # user_id = "60f4d5c5b5f0f0e5e8b2b5c9"
-    # latitude = "6.828828828828828"
-    # longitude = "79.86386702251839"
-    # radius = "303.5087719298246"
-    # start_time_restrictions = "7.00AM"
-    # end_time_restrictions = "7.00PM"
-    # accessibility = "Wheelchair-accessible car park, Wheelchair-accessible entrance"
-    # historical_contexts = "Ancient Buddhist monastery"
-    # hands_on_activities = "Photography, Sightseeing, Relaxing"
-    # location_id = "60f4d5c5b5f0f0e5e8b2b5c9"
-
-    # users = await list_users()
-    # interactions = await list_interaction()
     locations = await list_locations()
 
-    # users = pd.DataFrame(users)
-    # interactions = pd.DataFrame(interactions)
     locations = pd.DataFrame(locations)
 
-    # users.to_csv(save_path + "users.csv", index=False)
-    # interactions.to_csv(save_path + "interactions.csv", index=False)
     locations.to_csv(save_path + "locations.csv", index=False)
 
-    # aggregate_data()
-    # process_data()
+    filtered_data = filter_data(shortest_path, locations)
 
-    # filter locations by radius
-    # locations = locations[locations.apply(is_within_radius, axis=1,
-    #                                         current_latitude=float(latitude),
-    #                                         current_longitude=float(longitude),
-    #                                         radius=float(radius))]
-    # filtered_df = df[df.apply(lambda row: is_within_radius(row, current_latitude, current_longitude, radius), axis=1)]
-    locations = locations[locations.apply(lambda row: is_within_radius(row, shortest_path.latitude, shortest_path.longitude, shortest_path.distanceRadiusValue), axis=1)]
+    # keep only _id, name, latitude, longitude
+    filtered_data = filtered_data[['_id', 'name', 'latitude', 'longitude']]
 
-    print("Location_by_radius")
-    print(locations)
+    filtered_data = find_shortest_path(shortest_path, filtered_data)
 
-    # Convert "7.00AM - 7.00PM" to datetime.time objects
-    start_time = convert_time_string_to_time(shortest_path.updatedData["Time Restrictions"].split("-")[0])
-    end_time = convert_time_string_to_time(shortest_path.updatedData["Time Restrictions"].split("-")[1])
-
-    # Filter locations by time
-    locations = locations[locations.apply(lambda row: is_within_time_range(row, start_time, end_time), axis=1)]
-
-    print(locations)
-
-    #                     "Accessibility": "Not selected",
-    #                     "Historical Contexts": "Not selected",
-    #                     "Hands-On Activities": "Not selected"
-
-
-    # if filter is "Not selected" then don't filter
-    if shortest_path.updatedData["Accessibility"] != "Not selected":
-        # Split the given accessibility variable by comma and strip whitespace
-        accessibility_values = [value.strip() for value in shortest_path.updatedData["Accessibility"].split(",")]
-
-        locations = locations[locations.apply(lambda row: check_accessibility(row, accessibility_values), axis=1)]
-
-        print(locations)
-
-
-    # if filter is "Not selected" then don't filter
-    if shortest_path.updatedData["Historical Contexts"] != "Not selected":
-        # Split the given historical context variable by comma and strip whitespace
-        historical_context_values = [value.strip() for value in shortest_path.updatedData["Historical Contexts"].split(",")]
-
-        locations = locations[locations.apply(lambda row: check_accessibility(row, historical_context_values, column_to_be_checked='historical_context'), axis=1)]
-
-        print(locations)
-
-
-    # if filter is "Not selected" then don't filter
-    if shortest_path.updatedData["Hands-On Activities"] != "Not selected":
-        # Split the given hands on activities variable by comma and strip whitespace
-        hands_on_activities_values = [value.strip() for value in shortest_path.updatedData["Hands-On Activities"].split(",")]
-
-        locations = locations[locations.apply(lambda row: check_accessibility(row, hands_on_activities_values, column_to_be_checked='hands_on_activities'), axis=1)]
-
-        print(locations)
-
-    # Get the location id of the destination
-    destination_id = shortest_path.destination_id
-
-    # Get the location id of the user
-    user_id = shortest_path.user_id
-
-
-    return {"locations": locations.to_dict('records'), "location_count": len(locations)}
+    # return dataframe as json
+    return filtered_data.to_json(orient="records")
 
 
 

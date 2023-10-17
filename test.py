@@ -191,3 +191,5 @@ user_id = shortest_path['user_id']
 
 print("locations", locations.to_dict('records'))
 print("location_count", len(locations))
+
+
