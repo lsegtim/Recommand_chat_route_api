@@ -1,15 +1,18 @@
+import math
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, time
+from datetime import timedelta
 from typing import List
 
-import pandas as pd
 import motor.motor_asyncio
+import pandas as pd
 from bson import ObjectId
+from dateutil.parser import parser
 from fastapi import FastAPI, Request, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from chatbot import initialize_bot, get_response_chatbot, hey
+from chatbot import initialize_bot, get_response_chatbot
 
 # show all columns
 pd.set_option('display.max_columns', None)
@@ -41,6 +44,7 @@ data_length = 100000
 from recommander import get_rec
 
 chatbot, exit_conditions = initialize_bot()
+
 
 # print(get_response_chatbot("Hey how are you?", chatbot))
 
@@ -188,6 +192,69 @@ class InteractionModel(BaseModel):
 async def list_interaction():
     feedbacks = await db["interactions"].find().to_list(data_length)
     return feedbacks
+
+
+# user login model
+class UserLoginModel(BaseModel):
+    password: str = Field(...)
+    username: str = Field(...)
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+        schema_extra = {
+            "example": {
+                "password": "v^5BXk2C",
+                "username": "JustinDiaz"
+            }
+        }
+
+
+# login
+@app.post("/login")
+async def login(user: UserLoginModel = Body(...)):
+    try:
+        user = await db["users"].find_one({"username": user.username, "password": user.password})
+        if user:
+            return {"success": True, "user_id": str(user["_id"])}
+        else:
+            return {"success": False, "message": "Invalid username or password"}
+    except Exception as e:
+        print(e)
+        return {"success": False, "message": "Invalid username or password"}
+
+
+# sign up model
+class UserSignUpModel(BaseModel):
+    email: str = Field(...)
+    password: str = Field(...)
+    username: str = Field(...)
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+        schema_extra = {
+            "example": {
+                "password": "v^5BXk2C",
+                "username": "JustinDiaz"
+            }
+        }
+
+
+# sign up
+@app.post("/sign-up")
+async def sign_up(user: UserSignUpModel = Body(...)):
+    try:
+        user = await db["users"].insert_one({"username": user.username, "password": user.password, "email": user.email})
+        if user:
+            return {"success": True, "user_id": str(user.inserted_id)}
+        else:
+            return {"success": False, "message": "Invalid username or password"}
+    except Exception as e:
+        print(e)
+        return {"success": False, "message": "Invalid username or password"}
 
 
 # Authentication: true
@@ -442,8 +509,6 @@ async def get_recommendation_load_update(user_id: str, num_of_rec: int = 5):
     return {"recommendations": recommendation}
 
 
-
-
 # Chatbot
 @app.get("/chatbot/{message}")
 async def get_chatbot(message: str):
@@ -451,34 +516,124 @@ async def get_chatbot(message: str):
     return {"response": response}
 
 
+# {
+#   authenticated: false,
+#   username: "",
+#   password: "",
+#   user_id: "",
+#   latitude: 0.0,
+#   longitude: 0.0,
+#   destination_id: "",
+#   distanceRadiusValue: 10.0,
+#   updatedData: {
+#   "Time Restrictions": "Not selected",
+#   "Accessibility": "Not selected",
+#   "Historical Contexts": "Not selected",
+#   "Hands-On Activities": "Not selected"
+# }
+
+# shortest path model
+class ShortestPathModel(BaseModel):
+    # authenticated: bool = Field(...)
+    # username: str = Field(...)
+    # password: str = Field(...)
+    user_id: str = Field(...)
+    latitude: float = Field(...)
+    longitude: float = Field(...)
+    destination_id: str = Field(...)
+    distanceRadiusValue: float = Field(...)
+    updatedData: dict = Field(...)
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+        schema_extra = {
+            "example": {
+                "user_id": "652b9e279c8deef2485bf90a",
+                "latitude": 0.0,
+                "longitude": 0.0,
+                "destination_id": "652b9d229c8deef2485bf8e8",
+                "distanceRadiusValue": 10.0,
+                "updatedData": {
+                    "Time Restrictions": "7.00AM - 7.00PM",
+                    "Accessibility": "Not selected",
+                    "Historical Contexts": "Not selected",
+                    "Hands-On Activities": "Not selected"
+                }
+            }
+        }
 
 
-# user_id, latitude, longitude, radius, time restrictions, accessibility, historical contexts, hands-on activities, location id
+def haversine_distance(lat1, lon1, lat2, lon2):
+    r = 6371000  # Radius of the Earth in meters
+    phi1 = math.radians(lat1)
+    phi2 = math.radians(lat2)
+    delta_phi = math.radians(lat2 - lat1)
+    delta_lambda = math.radians(lon2 - lon1)
+
+    a = math.sin(delta_phi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2) ** 2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+    return r * c
+
+
+def is_within_radius(row, current_latitude, current_longitude, radius):
+    distance = haversine_distance(current_latitude, current_longitude, row['latitude'], row['longitude'])
+    return distance <= radius
+
+
+
+# Function to convert time string to datetime.time object
+def convert_time_string_to_time(time_string):
+    # 0:00 AM to time
+    if time_string == "0:00 AM":
+        return time(0, 0)
+    # pharse time string to time
+    return parser().parse(time_string).time()
+
+# Function to check if a time range overlaps with the operating hours of a row
+def is_within_time_range(row, start_time, end_time):
+    open_time = convert_time_string_to_time(row['openTime'])
+    close_time = convert_time_string_to_time(row['closeTime'])
+
+    # If the place is open 24 hours
+    if open_time == time(0, 0) and close_time == time(0, 0):
+        return True
+
+    # Check for overlap
+    return (start_time <= close_time and end_time >= open_time)
+
+
+def check_accessibility(row, accessibility_values, column_to_be_checked='accessibility'):
+    row_accessibility_values = set(row[column_to_be_checked].split(","))
+
+    return any(value in row_accessibility_values for value in accessibility_values)
 
 # Shortest Path
-@app.get("/shortest-path/{location_string}")
-async def get_shortest_path(location_string: str):
-    user_id = location_string.split(",")[0]
-    latitude = location_string.split(",")[1]
-    longitude = location_string.split(",")[2]
-    radius = location_string.split(",")[3]
-    start_time_restrictions = location_string.split(",")[4]
-    end_time_restrictions = location_string.split(",")[4].split("-")[1]
-    accessibility = location_string.split(",")[5]
-    historical_contexts = location_string.split(",")[6]
-    hands_on_activities = location_string.split(",")[7]
-    location_id = location_string.split(",")[8]
+@app.post("/shortest-path")
+async def get_shortest_path(shortest_path: ShortestPathModel = Body(...)):
+    # user_id = location_string.split(",")[0]
+    # latitude = location_string.split(",")[1]
+    # longitude = location_string.split(",")[2]
+    # radius = location_string.split(",")[3]
+    # start_time_restrictions = location_string.split(",")[4]
+    # end_time_restrictions = location_string.split(",")[4].split("-")[1]
+    # accessibility = location_string.split(",")[5]
+    # historical_contexts = location_string.split(",")[6]
+    # hands_on_activities = location_string.split(",")[7]
+    # location_id = location_string.split(",")[8]
 
-    user_id = "60f4d5c5b5f0f0e5e8b2b5c9"
-    latitude = "6.828828828828828"
-    longitude = "79.86386702251839"
-    radius = "303.5087719298246"
-    start_time_restrictions = "7.00AM"
-    end_time_restrictions = "7.00PM"
-    accessibility = "Wheelchair-accessible car park, Wheelchair-accessible entrance"
-    historical_contexts = "Ancient Buddhist monastery"
-    hands_on_activities = "Photography, Sightseeing, Relaxing"
-    location_id = "60f4d5c5b5f0f0e5e8b2b5c9"
+    # user_id = "60f4d5c5b5f0f0e5e8b2b5c9"
+    # latitude = "6.828828828828828"
+    # longitude = "79.86386702251839"
+    # radius = "303.5087719298246"
+    # start_time_restrictions = "7.00AM"
+    # end_time_restrictions = "7.00PM"
+    # accessibility = "Wheelchair-accessible car park, Wheelchair-accessible entrance"
+    # historical_contexts = "Ancient Buddhist monastery"
+    # hands_on_activities = "Photography, Sightseeing, Relaxing"
+    # location_id = "60f4d5c5b5f0f0e5e8b2b5c9"
 
     # users = await list_users()
     # interactions = await list_interaction()
@@ -494,6 +649,70 @@ async def get_shortest_path(location_string: str):
 
     # aggregate_data()
     # process_data()
+
+    # filter locations by radius
+    # locations = locations[locations.apply(is_within_radius, axis=1,
+    #                                         current_latitude=float(latitude),
+    #                                         current_longitude=float(longitude),
+    #                                         radius=float(radius))]
+    # filtered_df = df[df.apply(lambda row: is_within_radius(row, current_latitude, current_longitude, radius), axis=1)]
+    locations = locations[locations.apply(lambda row: is_within_radius(row, shortest_path.latitude, shortest_path.longitude, shortest_path.distanceRadiusValue), axis=1)]
+
+    print("Location_by_radius")
+    print(locations)
+
+    # Convert "7.00AM - 7.00PM" to datetime.time objects
+    start_time = convert_time_string_to_time(shortest_path.updatedData["Time Restrictions"].split("-")[0])
+    end_time = convert_time_string_to_time(shortest_path.updatedData["Time Restrictions"].split("-")[1])
+
+    # Filter locations by time
+    locations = locations[locations.apply(lambda row: is_within_time_range(row, start_time, end_time), axis=1)]
+
+    print(locations)
+
+    #                     "Accessibility": "Not selected",
+    #                     "Historical Contexts": "Not selected",
+    #                     "Hands-On Activities": "Not selected"
+
+
+    # if filter is "Not selected" then don't filter
+    if shortest_path.updatedData["Accessibility"] != "Not selected":
+        # Split the given accessibility variable by comma and strip whitespace
+        accessibility_values = [value.strip() for value in shortest_path.updatedData["Accessibility"].split(",")]
+
+        locations = locations[locations.apply(lambda row: check_accessibility(row, accessibility_values), axis=1)]
+
+        print(locations)
+
+
+    # if filter is "Not selected" then don't filter
+    if shortest_path.updatedData["Historical Contexts"] != "Not selected":
+        # Split the given historical context variable by comma and strip whitespace
+        historical_context_values = [value.strip() for value in shortest_path.updatedData["Historical Contexts"].split(",")]
+
+        locations = locations[locations.apply(lambda row: check_accessibility(row, historical_context_values, column_to_be_checked='historical_context'), axis=1)]
+
+        print(locations)
+
+
+    # if filter is "Not selected" then don't filter
+    if shortest_path.updatedData["Hands-On Activities"] != "Not selected":
+        # Split the given hands on activities variable by comma and strip whitespace
+        hands_on_activities_values = [value.strip() for value in shortest_path.updatedData["Hands-On Activities"].split(",")]
+
+        locations = locations[locations.apply(lambda row: check_accessibility(row, hands_on_activities_values, column_to_be_checked='hands_on_activities'), axis=1)]
+
+        print(locations)
+
+    # Get the location id of the destination
+    destination_id = shortest_path.destination_id
+
+    # Get the location id of the user
+    user_id = shortest_path.user_id
+
+
+    return {"locations": locations.to_dict('records'), "location_count": len(locations)}
+
 
 
 
@@ -518,7 +737,6 @@ async def get_shortest_path(location_string: str):
 # Accessibility: Choose an option
 # Historical Contexts: Rock Information
 # Hands-On Activities: Choose an option
-
 
 
 # # sentiment analysis
@@ -549,66 +767,3 @@ async def get_shortest_path(location_string: str):
 #     except Exception as e:
 #         print(e)
 #         return {"status": "failed"}
-
-
-# user login model
-class UserLoginModel(BaseModel):
-    password: str = Field(...)
-    username: str = Field(...)
-
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        schema_extra = {
-            "example": {
-                "password": "v^5BXk2C",
-                "username": "JustinDiaz"
-            }
-        }
-
-
-# login
-@app.post("/login")
-async def login(user: UserLoginModel = Body(...)):
-    try:
-        user = await db["users"].find_one({"username": user.username, "password": user.password})
-        if user:
-            return {"status": True, "user": user}
-        else:
-            return {"status": False, "message": "Invalid username or password"}
-    except Exception as e:
-        print(e)
-        return {"status": False, "message": "Invalid username or password"}
-
-
-# sign up model
-class UserSignUpModel(BaseModel):
-    email: str = Field(...)
-    password: str = Field(...)
-    username: str = Field(...)
-
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        schema_extra = {
-            "example": {
-                "password": "v^5BXk2C",
-                "username": "JustinDiaz"
-            }
-        }
-
-
-# sign up
-@app.post("/sign-up")
-async def sign_up(user: UserSignUpModel = Body(...)):
-    try:
-        user = await db["users"].insert_one({"username": user.username, "password": user.password, "email": user.email})
-        if user:
-            return {"status": True, "user": user}
-        else:
-            return {"status": False, "message": "Invalid username or password"}
-    except Exception as e:
-        print(e)
-        return {"status": False, "message": "Invalid username or password"}

@@ -45,4 +45,10 @@ username, password, email -> create new user -> user_id
 
 
 
+TODO:
+
+In recommadation -> Add unexpected once (Find a list of least visited places and recommend them)
+Chatbot -> Train Chatbot with corpus
+
+
 
