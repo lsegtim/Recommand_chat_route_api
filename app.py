@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field
 
 from chatbot import initialize_bot, get_response_chatbot
 from filtering import filter_data, find_shortest_path
+import json
 
 # show all columns
 pd.set_option('display.max_columns', None)
@@ -197,8 +198,8 @@ async def list_interaction():
 
 # user login model
 class UserLoginModel(BaseModel):
-    password: str = Field(...)
     username: str = Field(...)
+    password: str = Field(...)
 
     class Config:
         allow_population_by_field_name = True
@@ -206,8 +207,8 @@ class UserLoginModel(BaseModel):
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
-                "password": "v^5BXk2C",
-                "username": "JustinDiaz"
+                "username": "TaylorDeleon",
+                "password": "b)5RyXTm"
             }
         }
 
@@ -238,6 +239,7 @@ class UserSignUpModel(BaseModel):
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
+                "email": "Justin.Diaz@example.com",
                 "password": "v^5BXk2C",
                 "username": "JustinDiaz"
             }
@@ -479,6 +481,8 @@ async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
         recommendation, user_stat = get_rec(user_id, num_of_rec=num_of_rec)
     else:
         recommendation, user_stat = get_rec(user_id, num_of_rec=5)
+
+
     return {"recommendations": recommendation}
 
 
@@ -552,64 +556,18 @@ class ShortestPathModel(BaseModel):
         schema_extra = {
             "example": {
                 "user_id": "652b9e279c8deef2485bf90a",
-                "latitude": 0.0,
-                "longitude": 0.0,
+                "latitude": 6.91,
+                "longitude": 79.85,
                 "destination_id": "652b9d229c8deef2485bf8e8",
-                "distanceRadiusValue": 10.0,
+                "distanceRadiusValue": 50.0,
                 "updatedData": {
-                    "Time Restrictions": "7.00AM - 7.00PM",
+                    "Time Restrictions": "0.00AM - 0.00PM",
                     "Accessibility": "Not selected",
-                    "Historical Contexts": "Not selected",
-                    "Hands-On Activities": "Not selected"
+                    "Historical Contexts": "Ancient Buddhist monastery",
+                    "Hands-On Activities": "Photography, Sightseeing, Relaxing"
                 }
             }
         }
-
-
-def haversine_distance(lat1, lon1, lat2, lon2):
-    r = 6371000  # Radius of the Earth in meters
-    phi1 = math.radians(lat1)
-    phi2 = math.radians(lat2)
-    delta_phi = math.radians(lat2 - lat1)
-    delta_lambda = math.radians(lon2 - lon1)
-
-    a = math.sin(delta_phi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2) ** 2
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-
-    return r * c
-
-
-def is_within_radius(row, current_latitude, current_longitude, radius):
-    distance = haversine_distance(current_latitude, current_longitude, row['latitude'], row['longitude'])
-    return distance <= radius
-
-
-
-# Function to convert time string to datetime.time object
-def convert_time_string_to_time(time_string):
-    # 0:00 AM to time
-    if time_string == "0:00 AM":
-        return time(0, 0)
-    # pharse time string to time
-    return parser().parse(time_string).time()
-
-# Function to check if a time range overlaps with the operating hours of a row
-def is_within_time_range(row, start_time, end_time):
-    open_time = convert_time_string_to_time(row['openTime'])
-    close_time = convert_time_string_to_time(row['closeTime'])
-
-    # If the place is open 24 hours
-    if open_time == time(0, 0) and close_time == time(0, 0):
-        return True
-
-    # Check for overlap
-    return (start_time <= close_time and end_time >= open_time)
-
-
-def check_accessibility(row, accessibility_values, column_to_be_checked='accessibility'):
-    row_accessibility_values = set(row[column_to_be_checked].split(","))
-
-    return any(value in row_accessibility_values for value in accessibility_values)
 
 # Shortest Path
 @app.post("/shortest-path")
@@ -627,10 +585,27 @@ async def get_shortest_path(shortest_path: ShortestPathModel = Body(...)):
 
     filtered_data = find_shortest_path(shortest_path, filtered_data)
 
-    # return dataframe as json
-    return filtered_data.to_json(orient="records")
+    # save dataframe
+    filtered_data.to_csv("shortest_path.csv", index=False)
 
+    # open dataframe to json
+    filtered_data = pd.read_csv("shortest_path.csv")
 
+    # Convert DataFrame to a dictionary
+    df_dict = filtered_data.to_dict(orient='records')
+
+    # Convert dictionary to JSON string
+    json_string = json.dumps(df_dict)
+
+    # save json file
+    with open('shortest_path.json', 'w') as outfile:
+        json.dump(df_dict, outfile)
+
+    # open json file
+    with open('shortest_path.json') as json_file:
+        json_string = json.load(json_file)
+
+    return json_string
 
 
 # List<Location> Locations1 = [
@@ -684,3 +659,9 @@ async def get_shortest_path(shortest_path: ShortestPathModel = Body(...)):
 #     except Exception as e:
 #         print(e)
 #         return {"status": "failed"}
+
+
+
+
+
+# 652b9e279c8deef2485bf90c

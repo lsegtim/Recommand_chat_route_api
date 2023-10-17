@@ -56,8 +56,8 @@ def filter_data(shortest_path, locations):
     ################################################ Radius ################################################
     # filter locations by radius
     locations = locations[locations.apply(
-        lambda row: is_within_radius(row, shortest_path['latitude'], shortest_path['longitude'],
-                                     shortest_path['distanceRadiusValue']), axis=1)]
+        lambda row: is_within_radius(row, shortest_path.latitude, shortest_path.longitude,
+                                     shortest_path.distanceRadiusValue), axis=1)]
 
     print("Location_by_radius")
     print(locations)
@@ -65,8 +65,8 @@ def filter_data(shortest_path, locations):
 
     ################################################ Time ################################################
     # Convert "7.00AM - 7.00PM" to datetime.time objects
-    start_time = convert_time_string_to_time(shortest_path['updatedData']["Time Restrictions"].split("-")[0])
-    end_time = convert_time_string_to_time(shortest_path['updatedData']["Time Restrictions"].split("-")[1])
+    start_time = convert_time_string_to_time(shortest_path.updatedData["Time Restrictions"].split("-")[0])
+    end_time = convert_time_string_to_time(shortest_path.updatedData["Time Restrictions"].split("-")[1])
 
     print(start_time)
     print(end_time)
@@ -79,9 +79,9 @@ def filter_data(shortest_path, locations):
 
     ################################################ Accessibility ################################################
     # if filter is "Not selected" then don't filter
-    if shortest_path['updatedData']["Accessibility"] != "Not selected":
+    if shortest_path.updatedData["Accessibility"] != "Not selected":
         # Split the given accessibility variable by comma and strip whitespace
-        accessibility_values = [value.strip() for value in shortest_path['updatedData']["Accessibility"].split(",")]
+        accessibility_values = [value.strip() for value in shortest_path.updatedData["Accessibility"].split(",")]
 
         locations = locations[locations.apply(lambda row: check_accessibility(row, accessibility_values), axis=1)]
 
@@ -89,10 +89,10 @@ def filter_data(shortest_path, locations):
 
     ################################################ Historical Contexts ################################################
     # if filter is "Not selected" then don't filter
-    if shortest_path['updatedData']["Historical Contexts"] != "Not selected":
+    if shortest_path.updatedData["Historical Contexts"] != "Not selected":
         # Split the given historical context variable by comma and strip whitespace
         historical_context_values = [value.strip() for value in
-                                     shortest_path['updatedData']["Historical Contexts"].split(",")]
+                                     shortest_path.updatedData["Historical Contexts"].split(",")]
 
         locations = locations[locations.apply(
             lambda row: check_accessibility(row, historical_context_values, column_to_be_checked='historical_context'),
@@ -102,10 +102,10 @@ def filter_data(shortest_path, locations):
 
     ################################################ Hands-On Activities ################################################
     # if filter is "Not selected" then don't filter
-    if shortest_path['updatedData']["Hands-On Activities"] != "Not selected":
+    if shortest_path.updatedData["Hands-On Activities"] != "Not selected":
         # Split the given hands on activities variable by comma and strip whitespace
         hands_on_activities_values = [value.strip() for value in
-                                      shortest_path['updatedData']["Hands-On Activities"].split(",")]
+                                      shortest_path.updatedData["Hands-On Activities"].split(",")]
 
         locations = locations[locations.apply(
             lambda row: check_accessibility(row, hands_on_activities_values,
@@ -130,8 +130,12 @@ def sort_cycle_to_start_with_current_location(hamiltonian_cycle):
 
 
 def find_shortest_path(shortest_path, filtered_data):
+    # if filtered_data is empty then return empty dataframe
+    if filtered_data.empty:
+        return filtered_data
+
     # Shortest Path
-    current_location = (shortest_path['latitude'], shortest_path['longitude'])
+    current_location = (shortest_path.latitude, shortest_path.longitude)
     G, hamiltonian_cycle = generate_graph(current_location, filtered_data)
     print(hamiltonian_cycle)
 
