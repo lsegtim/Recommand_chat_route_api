@@ -482,8 +482,29 @@ async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
     else:
         recommendation, user_stat = get_rec(user_id, num_of_rec=5)
 
+    # from location dataframe keep only ids in recommadation
+    locations = pd.read_csv(save_path + "locations.csv")
+    locations = locations[locations['_id'].isin(recommendation)]
 
-    return {"recommendations": recommendation}
+    # Convert DataFrame to a dictionary
+    df_dict = locations.to_dict(orient='records')
+
+    # Convert dictionary to JSON string
+    json_string = json.dumps(df_dict)
+
+    # save json file
+    with open('recommendation.json', 'w') as outfile:
+        json.dump(df_dict, outfile)
+
+    # open json file
+    with open('recommendation.json') as json_file:
+        json_string = json.load(json_file)
+
+    return json_string
+    #
+    #
+    #
+    # return {"recommendations": recommendation}
 
 
 # Load data if last update is more than 1 hour and Recommendation
