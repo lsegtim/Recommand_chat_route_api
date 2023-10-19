@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from chatbot import initialize_bot, get_response_chatbot
-from filtering import filter_data, find_shortest_path
+from filtering import filter_data, find_shortest_path, sort_by_distance_from_current_location
 import json
 
 # show all columns
@@ -507,32 +507,32 @@ async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
     # return {"recommendations": recommendation}
 
 
-# Load data if last update is more than 1 hour and Recommendation
-@app.get("/recommendation-load-update/{user_id}")
-async def get_recommendation_load_update(user_id: str, num_of_rec: int = 5):
-    if load_log():
-        users = await list_users()
-        interactions = await list_interaction()
-        locations = await list_locations()
-
-        users = pd.DataFrame(users)
-        interactions = pd.DataFrame(interactions)
-        locations = pd.DataFrame(locations)
-
-        users.to_csv(save_path + "users.csv", index=False)
-        interactions.to_csv(save_path + "interactions.csv", index=False)
-        locations.to_csv(save_path + "locations.csv", index=False)
-
-        aggregate_data()
-        process_data()
-        # pre_process()
-        update_log()
-
-    if num_of_rec:
-        recommendation, user_stat = get_rec(user_id, num_of_rec=num_of_rec)
-    else:
-        recommendation, user_stat = get_rec(user_id, num_of_rec=5)
-    return {"recommendations": recommendation}
+# # Load data if last update is more than 1 hour and Recommendation
+# @app.get("/recommendation-load-update/{user_id}")
+# async def get_recommendation_load_update(user_id: str, num_of_rec: int = 5):
+#     if load_log():
+#         users = await list_users()
+#         interactions = await list_interaction()
+#         locations = await list_locations()
+#
+#         users = pd.DataFrame(users)
+#         interactions = pd.DataFrame(interactions)
+#         locations = pd.DataFrame(locations)
+#
+#         users.to_csv(save_path + "users.csv", index=False)
+#         interactions.to_csv(save_path + "interactions.csv", index=False)
+#         locations.to_csv(save_path + "locations.csv", index=False)
+#
+#         aggregate_data()
+#         process_data()
+#         # pre_process()
+#         update_log()
+#
+#     if num_of_rec:
+#         recommendation, user_stat = get_rec(user_id, num_of_rec=num_of_rec)
+#     else:
+#         recommendation, user_stat = get_rec(user_id, num_of_rec=5)
+#     return {"recommendations": recommendation}
 
 
 # Chatbot
@@ -624,6 +624,63 @@ async def get_shortest_path(shortest_path: ShortestPathModel = Body(...)):
 
     # open json file
     with open('shortest_path.json') as json_file:
+        json_string = json.load(json_file)
+
+    return json_string
+
+
+# Nearest Location by Current Location Model
+class NearestLocationModel(BaseModel):
+    latitude: float = Field(...)
+    longitude: float = Field(...)
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+        schema_extra = {
+            "example": {
+                "latitude": 6.91,
+                "longitude": 79.85
+            }
+        }
+
+# Nearest Location by Current Location
+@app.post("/nearest-location")
+async def get_nearest_location(nearest_location: NearestLocationModel = Body(...), num_of_rec: int = 10, distance: float = 0):
+    locations = await list_locations()
+
+    locations = pd.DataFrame(locations)
+
+    locations.to_csv(save_path + "locations.csv", index=False)
+
+    current_location = (nearest_location.latitude, nearest_location.longitude)
+
+    filtered_data = sort_by_distance_from_current_location(locations, current_location, distance)
+
+    # # keep only _id, name, latitude, longitude
+    # filtered_data = filtered_data[['_id', 'name', 'latitude', 'longitude']]
+
+    filtered_data = filtered_data.head(num_of_rec)
+
+    # save dataframe
+    filtered_data.to_csv("nearest_location.csv", index=False)
+
+    # open dataframe to json
+    filtered_data = pd.read_csv("nearest_location.csv")
+
+    # Convert DataFrame to a dictionary
+    df_dict = filtered_data.to_dict(orient='records')
+
+    # Convert dictionary to JSON string
+    json_string = json.dumps(df_dict)
+
+    # save json file
+    with open('nearest_location.json', 'w') as outfile:
+        json.dump(df_dict, outfile)
+
+    # open json file
+    with open('nearest_location.json') as json_file:
         json_string = json.load(json_file)
 
     return json_string
