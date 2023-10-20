@@ -79,14 +79,14 @@ def hey(chatbot):
 #         print(f"🪴 {chatbot.get_response(query)}")
 
 
-if __name__ == "__main__":
-    chatbot, exit_conditions = initialize_bot()
-    # print("Bot initialized")
-    # chatbot = train_bot_corpus(chatbot)
-    # print("Bot trained")
-    while True:
-        query = input("> ")
-        if query in exit_conditions:
-            break
-        else:
-            print(f"🪴 {chatbot.get_response(query)}")
+# if __name__ == "__main__":
+#     chatbot, exit_conditions = initialize_bot()
+#     # print("Bot initialized")
+#     # chatbot = train_bot_corpus(chatbot)
+#     # print("Bot trained")
+#     while True:
+#         query = input("> ")
+#         if query in exit_conditions:
+#             break
+#         else:
+#             print(f"🪴 {chatbot.get_response(query)}")
