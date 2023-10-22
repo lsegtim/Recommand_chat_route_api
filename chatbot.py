@@ -32,7 +32,7 @@ def train_chatbot_with_custom_corpus(chatbot):
     # corpus_trainer = ChatterBotCorpusTrainer(chatbot)
     # corpus_trainer.train(txt_folder)
     corpus_trainer = ChatterBotCorpusTrainer(chatbot)
-    corpus_trainer.train("chatterbot.corpus.locations")
+    corpus_trainer.train("chatterbot.corpus")
     print("Training chatbot with custom corpus done")
 
     return chatbot
@@ -47,11 +47,11 @@ def initialize_bot():
 
     chatbot = ChatBot("HistoMind")
 
-    train = False
+    train = True
 
     if train:
         # chatbot = train_bot(chatbot)
-        chatbot = train_bot_corpus(chatbot)
+        # chatbot = train_bot_corpus(chatbot)
         chatbot = train_chatbot_with_custom_corpus(chatbot)
 
     exit_conditions = (":q", "quit", "exit")
@@ -79,14 +79,14 @@ def hey(chatbot):
 #         print(f"🪴 {chatbot.get_response(query)}")
 
 
-# if __name__ == "__main__":
-#     chatbot, exit_conditions = initialize_bot()
-#     # print("Bot initialized")
-#     # chatbot = train_bot_corpus(chatbot)
-#     # print("Bot trained")
-#     while True:
-#         query = input("> ")
-#         if query in exit_conditions:
-#             break
-#         else:
-#             print(f"🪴 {chatbot.get_response(query)}")
+if __name__ == "__main__":
+    chatbot, exit_conditions = initialize_bot()
+    # print("Bot initialized")
+    # chatbot = train_bot_corpus(chatbot)
+    # print("Bot trained")
+    while True:
+        query = input("> ")
+        if query in exit_conditions:
+            break
+        else:
+            print(f"🪴 {chatbot.get_response(query)}")
