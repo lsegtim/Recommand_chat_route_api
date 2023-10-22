@@ -17,7 +17,7 @@ def train_chatbot_with_custom_corpus(chatbot):
     return chatbot
 
 
-def initialize_bot():
+def initialize_bot_english():
     try:
         nlp = spacy.load("en_core_web_md")
     except:
@@ -26,7 +26,7 @@ def initialize_bot():
 
     chatbot = ChatBot("HistoMind")
 
-    train = True
+    train = False
 
     if train:
         # chatbot = train_bot(chatbot)
@@ -38,20 +38,20 @@ def initialize_bot():
     return chatbot, exit_conditions
 
 
-def get_response_chatbot(query, chatbot):
+def get_response_chatbot_english(query, chatbot):
     # print("query: ", query)
     print(chatbot.get_response(query))
     return chatbot.get_response(query)
 
 
-if __name__ == "__main__":
-    chatbot, exit_conditions = initialize_bot()
-    # print("Bot initialized")
-    # chatbot = train_bot_corpus(chatbot)
-    # print("Bot trained")
-    while True:
-        query = input("> ")
-        if query in exit_conditions:
-            break
-        else:
-            print(f"🪴 {chatbot.get_response(query)}")
+# if __name__ == "__main__":
+#     chatbot, exit_conditions = initialize_bot()
+#     # print("Bot initialized")
+#     # chatbot = train_bot_corpus(chatbot)
+#     # print("Bot trained")
+#     while True:
+#         query = input("> ")
+#         if query in exit_conditions:
+#             break
+#         else:
+#             print(f"🪴 {chatbot.get_response(query)}")

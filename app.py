@@ -11,8 +11,12 @@ from dateutil.parser import parser
 from fastapi import FastAPI, Request, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+from langdetect import detect
 
-from chatbot import initialize_bot, get_response_chatbot
+from c_en.chatbot import initialize_bot_english, get_response_chatbot_english
+from c_g.chatbot import initialize_bot_german, get_response_chatbot_german
+from c_t.chatbot import initialize_bot_tamil, get_response_chatbot_tamil
+
 from filtering import filter_data, find_shortest_path, sort_by_distance_from_current_location
 import json
 
@@ -45,7 +49,9 @@ data_length = 100000
 
 from recommander import get_rec
 
-chatbot, exit_conditions = initialize_bot()
+chatbot_english, _ = initialize_bot_english()
+chatbot_german, _ = initialize_bot_german()
+chatbot_tamil, _ = initialize_bot_tamil()
 
 
 # print(get_response_chatbot("Hey how are you?", chatbot))
@@ -538,7 +544,16 @@ async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
 # Chatbot
 @app.get("/chatbot/{message}")
 async def get_chatbot(message: str):
-    response = str(get_response_chatbot(message, chatbot))
+    # detect language
+    language = detect(message)
+    if language == "en":
+        response = str(get_response_chatbot_english(message, chatbot_english))
+    elif language == "de":
+        response = str(get_response_chatbot_german(message, chatbot_german))
+    elif language == "ta":
+        response = str(get_response_chatbot_tamil(message, chatbot_tamil))
+    else:
+        response = "Sorry, I don't understand that."
     return {"response": response}
 
 
