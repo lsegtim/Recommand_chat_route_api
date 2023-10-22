@@ -579,7 +579,7 @@ class ShortestPathModel(BaseModel):
                 "user_id": "652b9e279c8deef2485bf90a",
                 "latitude": 6.91,
                 "longitude": 79.85,
-                "destination_id": "652b9d229c8deef2485bf8e8",
+                "destination_id": "652b9d229c8deef2485bf8e9",
                 "distanceRadiusValue": 50.0,
                 "updatedData": {
                     "Time Restrictions": "0.00AM - 0.00PM",

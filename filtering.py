@@ -3,6 +3,7 @@ import random
 from datetime import time
 
 import pandas as pd
+from bson import ObjectId
 from dateutil.parser import parser
 
 from shortest_path import generate_graph, plot_hamiltonian_cycle
@@ -53,6 +54,8 @@ def check_accessibility(row, accessibility_values, column_to_be_checked='accessi
 
 
 def filter_data(shortest_path, locations):
+    location_temp = locations.copy()
+
     ################################################ Radius ################################################
     # filter locations by radius
     locations = locations[locations.apply(
@@ -114,6 +117,17 @@ def filter_data(shortest_path, locations):
 
         print(locations)
 
+    print("location_count 1", len(locations))
+
+    # convert shortes_path.destination_id to <class 'bson.objectid.ObjectId'>
+    destination_id = ObjectId(shortest_path.destination_id)
+
+    # if destination_id is not in the filtered data
+    if destination_id not in locations['_id'].values:
+        # find the destination location and add it to the filtered data
+        destination_location = location_temp[location_temp['_id'] == destination_id]
+        locations = pd.concat([locations, destination_location])
+
     print("location_count", len(locations))
 
     return locations
@@ -137,16 +151,16 @@ def find_shortest_path(shortest_path, filtered_data):
     # Shortest Path
     current_location = (shortest_path.latitude, shortest_path.longitude)
     G, hamiltonian_cycle = generate_graph(current_location, filtered_data)
-    print(hamiltonian_cycle)
+    # print(hamiltonian_cycle)
 
     # Sort
     hamiltonian_cycle = sort_cycle_to_start_with_current_location(hamiltonian_cycle)
-    print(hamiltonian_cycle)
+    # print(hamiltonian_cycle)
 
     # show all columns in the dataframe
     pd.set_option('display.max_columns', None)
 
-    print(filtered_data)
+    # print(filtered_data)
 
     # Sort dataframe
     filtered_data = filtered_data.set_index('_id')
@@ -158,7 +172,7 @@ def find_shortest_path(shortest_path, filtered_data):
     filtered_data.loc[filtered_data['_id'] == 0, 'longitude'] = current_location[1]
     filtered_data.loc[filtered_data['_id'] == 0, 'name'] = "Current Location"
 
-    print(filtered_data)
+    # print(filtered_data)
 
     return filtered_data
 
