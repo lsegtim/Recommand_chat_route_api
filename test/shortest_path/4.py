@@ -3,6 +3,9 @@ import math
 import numpy as np
 import pandas as pd
 
+# show all columns
+pd.set_option('display.max_columns', None)
+
 
 def tsp(adj_matrix, start, end):
     n = len(adj_matrix)
@@ -62,6 +65,17 @@ def optimize_path(shortest_path, start_node_index, end_node_index, df):
         else:
             i += 1
 
+    # Step 2: Remove cycles
+    node_indices = {}  # Dictionary to keep track of the index at which each node is first encountered
+    for i, node in enumerate(shortest_path):
+        if node in node_indices:
+            # Cycle detected from node_indices[node] to i
+            # Remove the cycle by keeping the part of the path before the cycle
+            shortest_path = shortest_path[:node_indices[node] + 1] + shortest_path[i + 1:]
+            node_indices = {node: index for index, node in enumerate(shortest_path)}  # Update node_indices
+        else:
+            node_indices[node] = i  # No cycle detected, update node_indices
+
     # Ensure the optimized path starts and ends with the correct nodes
     if shortest_path[0] != start_node_index:
         shortest_path.insert(0, start_node_index)
@@ -69,6 +83,7 @@ def optimize_path(shortest_path, start_node_index, end_node_index, df):
         shortest_path.append(end_node_index)
 
     return shortest_path
+
 
 # Optimize the answer
 # def optimize_path(shortest_path, start_node_index, end_node_index, df):
@@ -102,8 +117,7 @@ def optimize_path(shortest_path, start_node_index, end_node_index, df):
 #
 #     return shortest_path
 
-
-def find_shortest_path(adj_matrix, start_node_id, end_node_id):
+def find_shortest_path(adj_matrix, start_node_id, end_node_id, df):
     start_node_index = df[df['_id'] == start_node_id].index[0]
     end_node_index = df[df['_id'] == end_node_id].index[0]
     print(start_node_index, end_node_index)
@@ -115,8 +129,6 @@ def find_shortest_path(adj_matrix, start_node_id, end_node_id):
     new_start = start_node_index
     new_end = end_node_index + len(adj_matrix)
 
-    print(new_start, new_end)
-    print(new_start, new_end)
     print(new_start, new_end)
 
     # Solve TSP on the new graph
@@ -130,7 +142,13 @@ def find_shortest_path(adj_matrix, start_node_id, end_node_id):
 
     shortest_path = optimize_path(shortest_path, start_node_index, end_node_index, df)
 
-    return shortest_path_length, shortest_path
+    print(df)
+    # by dataframe index sort the df
+    df = df.reindex(shortest_path)
+    df = df.reset_index()
+    print(df)
+
+    return shortest_path_length, shortest_path, df
 
 
 def haversine_distance(lat1, lon1, lat2, lon2):
@@ -169,5 +187,6 @@ end_node_id = "652b9d229c8deef2485bf8e9" # Rideekanda Forest Monastery
 
 # Usage
 adj_matrix = create_adjacency_matrix(df)
-shortest_path_length, shortest_path = find_shortest_path(adj_matrix, start_node_id, end_node_id)
+shortest_path_length, shortest_path, df = find_shortest_path(adj_matrix, start_node_id, end_node_id, df)
 print(f'Shortest path: {shortest_path}')  # [0, 3, 0, 2, 1, 4]
+print(f'Shortest path length: {shortest_path_length}')
