@@ -617,10 +617,15 @@ async def get_shortest_path(shortest_path: ShortestPathModel = Body(...)):
 
     locations.to_csv(save_path + "locations.csv", index=False)
 
+    # location_backup = locations[['_id', 'name', 'latitude', 'longitude']]
+
     filtered_data = filter_data(shortest_path, locations)
 
     # keep only _id, name, latitude, longitude
     filtered_data = filtered_data[['_id', 'name', 'latitude', 'longitude']]
+
+    # save dataframe
+    filtered_data.to_csv("filtered_data.csv", index=False)
 
     filtered_data = find_shortest_path(shortest_path, filtered_data)
 

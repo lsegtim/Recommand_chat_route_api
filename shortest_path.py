@@ -2,6 +2,7 @@ import math
 
 import numpy as np
 import pandas as pd
+from bson import ObjectId
 
 from filtering import haversine_distance
 
@@ -102,6 +103,15 @@ def optimize_path(shortest_path, start_node_index, end_node_index, df):
 
 def find_shortest_path_tsp(adj_matrix, start_node_id, end_node_id, df):
     start_node_index = df[df['_id'] == start_node_id].index[0]
+    print("\n\n\n\n\n\n")
+    print(end_node_id)
+    print(df['_id'])
+    print(df['_id'] == end_node_id)
+    print(df[df['_id'] == end_node_id].index[0])
+    print(df[df['_id'] == end_node_id].index[0])
+    print(df[df['_id'] == end_node_id].index[0])
+    print(df[df['_id'] == end_node_id].index[0])
+    print(df[df['_id'] == end_node_id].index[0])
     end_node_index = df[df['_id'] == end_node_id].index[0]
     print(start_node_index, end_node_index)
 
@@ -135,29 +145,23 @@ def find_shortest_path_tsp(adj_matrix, start_node_id, end_node_id, df):
 
 
 def find_shortest_path(shortest_path, filtered_data):
-    # if filtered_data is empty then return empty dataframe
-    if filtered_data.empty:
-        return filtered_data
-
-    # Shortest Path
-    current_location = (shortest_path.latitude, shortest_path.longitude)
-
     start_lat = shortest_path.latitude
     start_lon = shortest_path.longitude
-    destination_location = shortest_path.destination_id
+    destination_location = ObjectId(shortest_path.destination_id)
 
     # add start location to the dataframe
     filtered_data = pd.concat([filtered_data, pd.DataFrame([["start", "Current Location", start_lat, start_lon]],
                                                            columns=['_id', 'name', 'latitude', 'longitude'])], ignore_index=True)
 
+    # save csv
+    filtered_data.to_csv('filtered_data_2.csv', index=False)
+
     start_node_id = "start"
-    end_node_id = destination_location
 
     adj_matrix = create_adjacency_matrix(filtered_data)
     shortest_path_length, shortest_path, filtered_data = find_shortest_path_tsp(adj_matrix, start_node_id, destination_location, filtered_data)
     print(f'Shortest path: {shortest_path}')
     print(f'Shortest path length: {shortest_path_length}')
-
 
     # show all columns in the dataframe
     pd.set_option('display.max_columns', None)
