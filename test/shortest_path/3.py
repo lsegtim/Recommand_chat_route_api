@@ -28,6 +28,7 @@ def tsp(adj_matrix, start, end):
     path.reverse()
     return dp[(1 << n) - 1][end], path
 
+
 def duplicate_nodes(adj_matrix, copies):
     n = len(adj_matrix)
     new_n = n * copies
@@ -38,6 +39,7 @@ def duplicate_nodes(adj_matrix, copies):
             new_matrix[i][j] = adj_matrix[i % n][j % n]
 
     return new_matrix
+
 
 # Original adjacency matrix
 adj_matrix = [
@@ -66,7 +68,8 @@ shortest_path = [node % n for node in shortest_path]
 
 # Output
 print(f'Shortest path length: {shortest_path_length}')
-print(f'Shortest path: {shortest_path}') # [0, 3, 3, 0, 2, 2, 1, 1, 4, 4]
+print(f'Shortest path: {shortest_path}')  # [0, 3, 3, 0, 2, 2, 1, 1, 4, 4]
+
 
 # Optimize the answer
 def optimize_path(shortest_path):
@@ -79,21 +82,19 @@ def optimize_path(shortest_path):
 
     return shortest_path
 
+
 shortest_path = optimize_path(shortest_path)
-print(f'Shortest path: {shortest_path}') # [0, 3, 0, 2, 1, 4]
-
-
+print(f'Shortest path: {shortest_path}')  # [0, 3, 0, 2, 1, 4]
 
 # plot the graph with weighted edges
 import matplotlib.pyplot as plt
 import networkx as nx
 
 graph = nx.Graph()
-graph.add_weighted_edges_from([(0, 1, 1),(0, 2, 2),(0, 3, 3),(0, 4, 4),(1, 2, 5),(1, 3, 6),(1, 4, 7),(2, 3, 8),(2, 4, 9),(3, 4, 10)])
+graph.add_weighted_edges_from(
+    [(0, 1, 1), (0, 2, 2), (0, 3, 3), (0, 4, 4), (1, 2, 5), (1, 3, 6), (1, 4, 7), (2, 3, 8), (2, 4, 9), (3, 4, 10)])
 pos = nx.spring_layout(graph)
 nx.draw(graph, pos, with_labels=True)
-labels = nx.get_edge_attributes(graph,'weight')
+labels = nx.get_edge_attributes(graph, 'weight')
 nx.draw_networkx_edge_labels(graph, pos, edge_labels=labels)
 plt.show()
-
-

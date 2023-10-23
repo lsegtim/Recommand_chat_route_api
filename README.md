@@ -23,20 +23,20 @@ You can test with,
 
     sentiment = "The restaurant provided updates on the status of our order, which was very helpful."
 
-
 Repleace sentiment prediction part
 Model
 Requarement
 
-
 For sentiment analyzis we created a model with keras.
 
-First before training the model we cleaned data. We removed stop words, punctuations, numbers and converted all the words to lower case. 
+First before training the model we cleaned data. We removed stop words, punctuations, numbers and converted all the
+words to lower case.
 Then lemmatization was done to convert words to their base form.
 Then pos tagging was done to get the part of speech of each word.
 Then we tokenized the words and converted them to sequences.
 
-Then the model was created with 3 layers. First layer was embedding layer. Second layer was LSTM layer. Third layer was dense layer with softmax.
+Then the model was created with 3 layers. First layer was embedding layer. Second layer was LSTM layer. Third layer was
+dense layer with softmax.
 Then the model was trained with 70 epochs.
 
 Model is compiled with rmsprop optimizer and categorical_crossentropy loss function. with accuracy as the metric.
@@ -45,13 +45,13 @@ Then early stopping also added to stop training if no progress is showing.
 
 
 _________________________________________________________________
- Layer (type)                Output Shape              Param #   
+Layer (type)                Output Shape              Param #
 =================================================================
- embedding_1 (Embedding)     (None, None, 20)          100000    
-                                                                 
- lstm_1 (LSTM)               (None, 20)                3280      
-                                                                 
- dense_1 (Dense)             (None, 3)                 63        
+embedding_1 (Embedding)     (None, None, 20)          100000
+
+lstm_1 (LSTM)               (None, 20)                3280
+
+dense_1 (Dense)             (None, 3)                 63
                                                                  
 =================================================================
 Total params: 103,343
@@ -60,17 +60,11 @@ Non-trainable params: 0
 _________________________________________________________________
 
 
-Then the model and tokenizer was saved. 
+Then the model and tokenizer was saved.
 
 Later they are loaded for prediction.
 
-
-
-
 pip install "fastapi[all]"
-
-
-
 
 pymongo==4.3.3
 motor==3.1.2
@@ -79,12 +73,6 @@ pydantic==1.10.7
 fastapi==0.95.1
 python-dotenv==1.0.0
 pandas==2.0.0
-
-
-
-
-
-
 
 pymongo==4.3.3
 motor==3.1.2

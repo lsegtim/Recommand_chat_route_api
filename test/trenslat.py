@@ -1,6 +1,8 @@
 import os
-from googletrans import Translator, LANGUAGES
+
 import yaml
+from googletrans import Translator
+
 
 def translate_text(text, target_lang):
     translator = Translator()
@@ -10,6 +12,7 @@ def translate_text(text, target_lang):
         print(f"Error: {e}")
         return text
     return translated.text
+
 
 def translate_file(file_path, target_lang):
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -21,6 +24,7 @@ def translate_file(file_path, target_lang):
     with open(new_file_path, 'w', encoding='utf-8') as file:
         yaml.dump(translated_data, file, allow_unicode=True)
 
+
 def translate_structure(struct, target_lang):
     if isinstance(struct, dict):
         return {key: translate_structure(value, target_lang) for key, value in struct.items()}
@@ -30,6 +34,7 @@ def translate_structure(struct, target_lang):
         return translate_text(struct, target_lang)
     else:
         return struct  # if it's neither dict, list, nor str, return it as is
+
 
 def main():
     directory_path = 'data'  # replace with your directory path
@@ -42,6 +47,7 @@ def main():
                 file_path = os.path.join(root, file)
                 for target_lang in target_languages:
                     translate_file(file_path, target_lang)
+
 
 if __name__ == "__main__":
     main()

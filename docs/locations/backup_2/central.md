@@ -8,13 +8,14 @@ closeTime: 5:00 PM
 latitude: 7.293608973984608
 longitude: 80.63645944060477
 accessibility: Wheelchair-accessible car park, Wheelchair-accessible entrance
-historical_context: 
-hands_on_activities: 
-planning: 
+historical_context:
+hands_on_activities:
+planning:
 rating: 4.7
 
 name: Gadaladeniya Raja maha viharaya
-description: A beautiful stone temple built by King Wickramabahu III in the 14th century, showcasing South Indian architectural influences.
+description: A beautiful stone temple built by King Wickramabahu III in the 14th century, showcasing South Indian
+architectural influences.
 imageUrl: https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Gadaladeniya_Viharaya_02.JPG/1280px-Gadaladeniya_Viharaya_02.JPG
 city: Pilimathalawa, Kandy
 province: Central
@@ -22,10 +23,10 @@ openTime: 7:00 AM
 closeTime: 8:00 PM
 latitude: 7.257530000000011
 longitude: 80.53695658715819
-accessibility: 
-historical_context: 
-hands_on_activities: 
-planning: 
+accessibility:
+historical_context:
+hands_on_activities:
+planning:
 rating: 4.8
 
 name: Embekka Dewalaya
@@ -37,14 +38,15 @@ openTime: 0:00 AM
 closeTime: 0:00 AM
 latitude: 7.2179443927577775
 longitude: 80.56513081011812
-accessibility: 
-historical_context: 
-hands_on_activities: 
-planning: 
+accessibility:
+historical_context:
+hands_on_activities:
+planning:
 rating: 4.6
 
 name: Sri Pada / Adam's Peak
-description: A sacred mountain revered by multiple religions, with a footprint-shaped mark believed to be that of Lord Buddha or Adam, depending on religious belief.
+description: A sacred mountain revered by multiple religions, with a footprint-shaped mark believed to be that of Lord
+Buddha or Adam, depending on religious belief.
 imageUrl: https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Sri_Pada.JPG/1280px-Sri_Pada.JPG
 city: Ratnapura
 province: Central
@@ -52,14 +54,15 @@ openTime: 0:00 AM
 closeTime: 0:00 PM
 latitude: 6.809642740550588
 longitude: 80.48906698264882
-accessibility: 
-historical_context: 
-hands_on_activities: 
-planning: 
+accessibility:
+historical_context:
+hands_on_activities:
+planning:
 rating: 4.6
 
 name: Nalanda Gedige (Central point of Sri Lanka)
-description: A unique archaeological site blending Hindu and Buddhist architectural styles, believed to have been a place of worship.
+description: A unique archaeological site blending Hindu and Buddhist architectural styles, believed to have been a
+place of worship.
 imageUrl: https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Nalanda_Gedige.jpg/1280px-Nalanda_Gedige.jpg
 city: Matale
 province: Central
@@ -70,11 +73,12 @@ longitude: 80.645856
 accessibility: Wheelchair-accessible car park
 historical_context: Ancient Buddhist monastery
 hands_on_activities: Photography, Sightseeing, Relaxing, Good for kids
-planning: 
+planning:
 rating: 4.6
 
 name: Aluvihara Rock Cave Temple
-description: An ancient cave temple where the Tripitaka (the Buddhist scriptures) is said to have been written on ola leaves.
+description: An ancient cave temple where the Tripitaka (the Buddhist scriptures) is said to have been written on ola
+leaves.
 imageUrl: https://tlc.lk/wp-content/uploads/2017/08/TLClk_Aluvihara-Rock-Cave-Temple-CSP0779327-1.jpg
 city: Aluvihare, Matale
 province: Central
@@ -85,7 +89,7 @@ longitude: 80.62178391906617
 accessibility: Wheelchair-accessible car park
 historical_context: Ancient Buddhist monastery
 hands_on_activities: Photography, Sightseeing, Relaxing
-planning: 
+planning:
 rating: 4.7
 
 name: Arankale Buddhist Monastery
@@ -98,9 +102,9 @@ closeTime: 5:00 PM
 latitude: 7.639653772779017
 longitude: 80.41433284263776
 accessibility: Wheelchair-accessible car park
-historical_context: 
-hands_on_activities: 
-planning: 
+historical_context:
+hands_on_activities:
+planning:
 rating: 4.6
 
 name: Bambaragala Purana Rajamaha Viharaya
@@ -112,10 +116,10 @@ openTime: 5:00 AM
 closeTime: 6:00 PM
 latitude: 7.969620751150967
 longitude: 80.13120920223723
-accessibility: 
+accessibility:
 historical_context: Ancient Buddhist monastery
 hands_on_activities: Photography, Sightseeing, Relaxing
-planning: 
+planning:
 rating: 4.8
 
 name: Lankatilaka Temple
@@ -127,14 +131,15 @@ openTime: 9:00 AM
 closeTime: 5:00 PM
 latitude: 7.962814392028876
 longitude: 81.00106031042556
-accessibility: 
+accessibility:
 historical_context: Ancient Buddhist monastery
 hands_on_activities: Photography, Sightseeing, Relaxing
-planning: 
+planning:
 rating: 4.7
 
 name: Adisham Bungalow (St.Benedict's Monastery)
-description: A beautifully preserved colonial mansion built by Sir Thomas Lester Villiers, featuring picturesque gardens and architecture.
+description: A beautifully preserved colonial mansion built by Sir Thomas Lester Villiers, featuring picturesque gardens
+and architecture.
 imageUrl: https://upload.wikimedia.org/wikipedia/commons/2/2d/Adisham_Bungalow.JPG
 city: Haputale
 province: Central
@@ -149,7 +154,8 @@ planning: Getting tickets in advance recommended
 rating: 4.6
 
 name: Rideekanda Forest Monastery
-description: An archaeological site with ancient ruins and inscriptions, providing insight into the region's historical Buddhist presence.
+description: An archaeological site with ancient ruins and inscriptions, providing insight into the region's historical
+Buddhist presence.
 imageUrl: https://www.rideekanda.com/uploads/2022/1/rideekanda_forest_monastery_sri_lanka_53.jpg
 city: Matale
 province: Central
@@ -157,7 +163,7 @@ openTime: 0:00 AM
 closeTime: 0:00 AM
 latitude: 7.534774392447118
 longitude: 80.557663210421
-accessibility: 
+accessibility:
 historical_context: Ancient Buddhist monastery
 hands_on_activities: Photography, Sightseeing, Relaxing
 planning: Getting tickets in advance recommended

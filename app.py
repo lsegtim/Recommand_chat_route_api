@@ -1,25 +1,21 @@
-import math
+import json
 import os
-from datetime import datetime, time
+from datetime import datetime
 from datetime import timedelta
 from typing import List
 
 import motor.motor_asyncio
 import pandas as pd
 from bson import ObjectId
-from dateutil.parser import parser
 from fastapi import FastAPI, Request, Body
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
 from langdetect import detect
+from pydantic import BaseModel, Field
 
 from c_en.chatbot import initialize_bot_english, get_response_chatbot_english
 from c_g.chatbot import initialize_bot_german, get_response_chatbot_german
 from c_t.chatbot import initialize_bot_tamil, get_response_chatbot_tamil
-
 from filtering import filter_data
-import json
-
 from nearest_locations import sort_by_distance_from_current_location
 from shortest_path import find_shortest_path
 
@@ -608,6 +604,7 @@ class ShortestPathModel(BaseModel):
             }
         }
 
+
 # Shortest Path
 @app.post("/shortest-path")
 async def get_shortest_path(shortest_path: ShortestPathModel = Body(...)):
@@ -668,9 +665,11 @@ class NearestLocationModel(BaseModel):
             }
         }
 
+
 # Nearest Location by Current Location
 @app.post("/nearest-location")
-async def get_nearest_location(nearest_location: NearestLocationModel = Body(...), num_of_rec: int = 10, distance: float = 0):
+async def get_nearest_location(nearest_location: NearestLocationModel = Body(...), num_of_rec: int = 10,
+                               distance: float = 0):
     locations = await list_locations()
 
     locations = pd.DataFrame(locations)
@@ -704,6 +703,5 @@ async def get_nearest_location(nearest_location: NearestLocationModel = Body(...
         json_string = json.load(json_file)
 
     return json_string
-
 
 # 652b9e279c8deef2485bf90c

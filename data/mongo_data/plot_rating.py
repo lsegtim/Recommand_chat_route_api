@@ -1,5 +1,5 @@
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
 
 df = pd.read_csv("interactions.csv")
 
@@ -12,4 +12,3 @@ df['rating'].value_counts().plot(kind='bar')
 for index, value in enumerate(df['rating'].value_counts()):
     plt.text(index, value, str(value))
 plt.show()
-

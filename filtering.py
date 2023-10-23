@@ -1,5 +1,4 @@
 import math
-import random
 from datetime import time
 
 import pandas as pd
@@ -129,5 +128,3 @@ def filter_data(shortest_path, locations):
     print("location_count", len(locations))
 
     return locations
-
-

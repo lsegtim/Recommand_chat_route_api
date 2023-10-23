@@ -8,6 +8,7 @@ adj_matrix = [
     [4, 7, 9, 10, 0]
 ]
 
+
 def tsp(adj_matrix, start, end):
     n = len(adj_matrix)
     # memoization table
@@ -41,6 +42,7 @@ def tsp(adj_matrix, start, end):
     path.reverse()  # reverse the path to get the correct order from start to end
     return dp[(1 << n) - 1][end], path  # return the shortest path length and the path itself
 
+
 # Usage
 shortest_path_length, shortest_path = tsp(adj_matrix, 0, 2)  # Assuming start node is 0 and end node is 4
 print(f'Shortest path length: {shortest_path_length}')
@@ -51,11 +53,10 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 graph = nx.Graph()
-graph.add_weighted_edges_from([(0, 1, 1),(0, 2, 2),(0, 3, 3),(0, 4, 4),(1, 2, 5),(1, 3, 6),(1, 4, 7),(2, 3, 8),(2, 4, 9),(3, 4, 10)])
+graph.add_weighted_edges_from(
+    [(0, 1, 1), (0, 2, 2), (0, 3, 3), (0, 4, 4), (1, 2, 5), (1, 3, 6), (1, 4, 7), (2, 3, 8), (2, 4, 9), (3, 4, 10)])
 pos = nx.spring_layout(graph)
 nx.draw(graph, pos, with_labels=True)
-labels = nx.get_edge_attributes(graph,'weight')
+labels = nx.get_edge_attributes(graph, 'weight')
 nx.draw_networkx_edge_labels(graph, pos, edge_labels=labels)
 plt.show()
-
-

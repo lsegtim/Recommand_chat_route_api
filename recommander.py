@@ -248,7 +248,8 @@ def get_rec(my_profile, num_of_rec):
                     .reset_index().rename(columns={user_id: 'recStrength'})
 
                 # Recommend the highest predicted rating movies that the user hasn't seen yet.
-                recommendations_df = sorted_user_predictions[~sorted_user_predictions['location_id'].isin(items_to_ignore)] \
+                recommendations_df = sorted_user_predictions[
+                    ~sorted_user_predictions['location_id'].isin(items_to_ignore)] \
                     .sort_values('recStrength', ascending=False) \
                     .head(topn)
 

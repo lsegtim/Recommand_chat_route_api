@@ -19,7 +19,9 @@ with open('western.md', 'r') as f:
 # print(data)
 
 # new dataframe
-df = pd.DataFrame(columns=["name", "description", "imageUrl", "city", "province", "openTime", "closeTime", "latitude", "longitude", "accessibility", "historical_context", "hands_on_activities", "planning", "rating"])
+df = pd.DataFrame(
+    columns=["name", "description", "imageUrl", "city", "province", "openTime", "closeTime", "latitude", "longitude",
+             "accessibility", "historical_context", "hands_on_activities", "planning", "rating"])
 
 # for each line in data
 for i, line in enumerate(data):
@@ -29,7 +31,10 @@ for i, line in enumerate(data):
     line_temp = [item.split(': ', 1)[1] for item in line_temp]
 
     # concat to dataframe
-    df = pd.concat([df, pd.DataFrame([line_temp], columns=["name", "description", "imageUrl", "city", "province", "openTime", "closeTime", "latitude", "longitude", "accessibility", "historical_context", "hands_on_activities", "planning", "rating"])])
+    df = pd.concat([df, pd.DataFrame([line_temp],
+                                     columns=["name", "description", "imageUrl", "city", "province", "openTime",
+                                              "closeTime", "latitude", "longitude", "accessibility",
+                                              "historical_context", "hands_on_activities", "planning", "rating"])])
 
 print(df)
 

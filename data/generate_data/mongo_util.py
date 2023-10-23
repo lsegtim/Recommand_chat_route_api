@@ -1,8 +1,8 @@
-from pymongo.mongo_client import MongoClient
+import os
 
 # load from .env
 from dotenv import load_dotenv
-import os
+from pymongo.mongo_client import MongoClient
 
 load_dotenv()
 
@@ -17,6 +17,7 @@ try:
     print("Pinged your deployment. You successfully connected to MongoDB!")
 except Exception as e:
     print(e)
+
 
 # exit()
 

@@ -1,6 +1,5 @@
 import random
 
-import fake
 import pandas as pd
 
 users = pd.read_csv("users.csv")

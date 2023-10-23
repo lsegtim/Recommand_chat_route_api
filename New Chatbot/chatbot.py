@@ -2,8 +2,8 @@ import random
 
 import spacy
 import yaml
-from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 # Load spaCy model and dataset
 nlp = spacy.load("en_core_web_md")
@@ -11,11 +11,13 @@ nlp = spacy.load("en_core_web_md")
 with open("conversations.yml", "r") as file:
     dataset = yaml.safe_load(file)
 
+
 # Function to extract recognized entities
 def extract_entities(user_input):
     doc = nlp(user_input)
     entities = [ent.text for ent in doc.ents]
     return entities
+
 
 # Function for similarity search
 def find_similar_response(user_input):
@@ -36,11 +38,13 @@ def find_similar_response(user_input):
     else:
         return "I'm sorry, I don't have information about that."
 
+
 # Vectorize the dataset for similarity search
 corpus = [item[0] for item in dataset]
 print(corpus)
 vectorizer = TfidfVectorizer()
 vectorizer.fit(corpus)
+
 
 # Main chatbot loop
 def find_entity_based_response(entity):

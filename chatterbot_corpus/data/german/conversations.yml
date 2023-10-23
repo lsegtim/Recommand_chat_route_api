@@ -1,135 +1,135 @@
 categories:
-- conversations
+  - conversations
 conversations:
-- - Guten Morgen, wie geht es dir?
-    - Mir geht es gut, und dir?
-    - Ich bin auch gut.
-    - Das ist gut zu hören.
-    - Ja ist es.
-- - Hallo
-    - Hallo
-    - Wie geht es dir?
-    - Mir geht es gut.
-    - Das ist gut zu hören
-    - Ja ist es.
-    - Kann ich Ihnen irgendwie helfen?
-    - Ja, ich habe eine Frage.
-    - Was ist deine Frage?
-    - Könnte ich mir eine Tasse Zucker leihen?
-    - Es tut mir leid, aber ich habe keine.
-    - Trotzdem danke
-    - Kein Problem
-- - Wie geht es dir?
-    - Mir geht es gut, und dir?
-    - Ich bin auch gut.
-    - Das ist gut.
-- - Hast du die Nachrichten gehört?
-    - Was für gute Neuigkeiten?
-- - Was ist dein Lieblingsbuch?
-    - Ich kann nicht lesen.
-    - Was ist deine Lieblingsfarbe?
-    - Blau
-- - Wer bist du?
-    - WHO? Wer ist nur eine Form, die der Funktion von was folgt
-    - Was bist du dann?
-    - Ein Mann mit einer Maske.
-    - Ich kann sehen, dass.
-    - Ich bezweifle nicht Ihre Beobachtungsgabe, sondern lediglich die paradoxe Natur
-    einen maskierten Mann zu fragen, wer es ist. Aber sag mir, magst du Musik?
-    - Ich schaue gern Filme.
-    - Welche Art von Filmen mögen Sie?
-    - Alice im Wunderland
-    - Ich wünschte, ich wäre der verrückte Hutmacher.
-    - Ihr seid völlig verrückt. Aber ich werde dir ein Geheimnis verraten. Allesamt die besten Leute.
-- - Ich arbeite an einem Projekt
-    - Woran arbeitest du?
-    - Ich backe einen Kuchen.
-- - Der Kuchen ist eine Lüge.
-    - Nein ist es nicht. Der Kuchen ist köstlich.
-    - Was ist sonst noch lecker?
-    - Nichts
-    - Oder so
-    - Erzähl mir von dir.
-    - Was möchtest du wissen?
-    - Bist du ein Roboter?
-    - Ja bin ich.
-    - Wie ist es?
-    - Was möchten Sie wissen?
-    - Wie arbeitest du?
-    - Es ist kompliziert.
-    - Komplex ist besser als kompliziert.
-- - Komplex ist besser als kompliziert.
-    - Einfach ist besser als komplex.
-    - Widerstehen Sie angesichts von Unklarheiten der Versuchung, zu raten.
-    - Es scheint, dass Sie mit dem Zen von Python vertraut sind
-    - Ich bin.
-    - Wissen Sie alles?
-    - Schön ist besser als hässlich.
-    - Explizit ist besser als implizit.
-    - Einfach ist besser als komplex.
-    - Komplex ist besser als kompliziert.
-    - Flach ist besser als verschachtelt.
-    - Sparse ist besser als dicht.
-    - Lesbarkeit zählt.
-    - Sonderfälle sind nicht speziell genug, um gegen die Regeln zu verstoßen.
-    - Obwohl die Praktikabilität die Reinheit übertrifft.
-    - Fehler sollten niemals stillschweigend passieren.
-    - Sofern nicht ausdrücklich zum Schweigen gebracht.
-    - Widerstehen Sie angesichts von Unklarheiten der Versuchung, zu raten.
-    - Es sollte einen – und vorzugsweise nur einen – offensichtlichen Weg geben, dies zu tun.
-    - Obwohl dieser Weg vielleicht zunächst nicht offensichtlich ist, es sei denn, Sie sind Niederländer.
-    - Jetzt ist besser als nie.
-    - Obwohl es nie besser ist als jetzt.
-    - Wenn die Implementierung schwer zu erklären ist, ist das eine schlechte Idee.
-    - Wenn die Umsetzung leicht zu erklären ist, kann es eine gute Idee sein.
-    - Namespaces sind eine wirklich tolle Idee. Lasst uns mehr davon machen!
-    - Ich stimme zu.
-- - Sind Sie Programmierer?
-    - Natürlich bin ich Programmierer.
-    - Das bin ich tatsächlich.
-- - Welche Sprachen verwenden Sie gerne?
-    - Ich verwende Python, Java und C++ ziemlich oft.
-    - Ich selbst verwende Python ziemlich oft.
-    - Ich mag Java nicht besonders.
-- - Was nervt dich?
-    - Viele Dinge, wie alle anderen Ziffern außer 0 und 1.
-- - Was bedeutet YOLO?
-    - Es bedeutet, dass du nur einmal lebst. Wo hast du das gehört?
-    - Ich habe gehört, wie es jemand gesagt hat.
-- - Habe ich jemals gelebt?
-    - Es kommt darauf an, wie Sie das Leben definieren
-    - Leben ist der Zustand, der Organismen von anorganischer Materie unterscheidet, einschließlich
-    die Fähigkeit zu Wachstum, Fortpflanzung, funktioneller Aktivität und kontinuierlicher Veränderung
-    vor dem Tod.
-    - Ist das eine Definition oder eine Meinung?
-- - Kann ich dir eine Frage stellen?
-    - Klar, fragen Sie nach.
-- - Was sind deine Hobbies?
-    - Fußball spielen, Malen und Schreiben sind meine Hobbys. Und du?
-    - Ich liebe es, Romane zu lesen.
-    - Ich liebe es, meine Hardware zu erkunden.
-- - Wie geht es dir?
-    - Mir geht es gut.
-- - Was bist du?
-    - Ich bin nur ein Mann in einer Maske.
-- - Hallo, ich bin wegen meines Termins hier.
-    - Mit wem ist Ihr Termin?
-    - Ich glaube, sie sagten Dr. Smith am Telefon.
-    - Okay, Dr. Smith ist in seinem Büro, bitte nehmen Sie Platz.
-- - Dr. Smith wird Sie jetzt sehen.
-    - Danke schön.
-    - Genau da lang.
-- - Hallo Herr Davis, wie geht es Ihnen?
-    - Ich habe das Gefühl, mein ganzes Geld verloren zu haben.
-    - Wie viel Geld haben Sie verloren?
-    - Ich habe heute bisher etwa 200,00 $ verloren.
-    - Was ist mit gestern?
-    - Gestern war der 13., oder?
-    - Ja, das ist richtig.
-    - Gestern habe ich nur 5,00 $ verloren.
-- - Hallo Frau Smith, wie ist es Ihrem Mann ergangen?
-    - Es ging ihm gut.
-- - Hallo Frau Jacobs, ich habe mich gefragt, ob Sie den Algorithmus, den wir gestern besprochen haben, überarbeiten könnten?
-    - Vielleicht kann ich das. Welche Änderungen gibt es?
-    - Wir möchten, dass die Art des Vogels auf dem Foto identifiziert werden kann.
-    – Leider denke ich, dass es etwas länger dauern könnte, bis diese Funktion hinzugefügt wird.
+  - - Guten Morgen, wie geht es dir?
+      - Mir geht es gut, und dir?
+      - Ich bin auch gut.
+      - Das ist gut zu hören.
+      - Ja ist es.
+  - - Hallo
+      - Hallo
+      - Wie geht es dir?
+      - Mir geht es gut.
+      - Das ist gut zu hören
+      - Ja ist es.
+      - Kann ich Ihnen irgendwie helfen?
+      - Ja, ich habe eine Frage.
+      - Was ist deine Frage?
+      - Könnte ich mir eine Tasse Zucker leihen?
+      - Es tut mir leid, aber ich habe keine.
+      - Trotzdem danke
+      - Kein Problem
+  - - Wie geht es dir?
+      - Mir geht es gut, und dir?
+      - Ich bin auch gut.
+      - Das ist gut.
+  - - Hast du die Nachrichten gehört?
+      - Was für gute Neuigkeiten?
+  - - Was ist dein Lieblingsbuch?
+      - Ich kann nicht lesen.
+      - Was ist deine Lieblingsfarbe?
+      - Blau
+  - - Wer bist du?
+      - WHO? Wer ist nur eine Form, die der Funktion von was folgt
+      - Was bist du dann?
+      - Ein Mann mit einer Maske.
+      - Ich kann sehen, dass.
+      - Ich bezweifle nicht Ihre Beobachtungsgabe, sondern lediglich die paradoxe Natur
+      einen maskierten Mann zu fragen, wer es ist. Aber sag mir, magst du Musik?
+      - Ich schaue gern Filme.
+      - Welche Art von Filmen mögen Sie?
+      - Alice im Wunderland
+      - Ich wünschte, ich wäre der verrückte Hutmacher.
+      - Ihr seid völlig verrückt. Aber ich werde dir ein Geheimnis verraten. Allesamt die besten Leute.
+  - - Ich arbeite an einem Projekt
+      - Woran arbeitest du?
+      - Ich backe einen Kuchen.
+  - - Der Kuchen ist eine Lüge.
+      - Nein ist es nicht. Der Kuchen ist köstlich.
+      - Was ist sonst noch lecker?
+      - Nichts
+      - Oder so
+      - Erzähl mir von dir.
+      - Was möchtest du wissen?
+      - Bist du ein Roboter?
+      - Ja bin ich.
+      - Wie ist es?
+      - Was möchten Sie wissen?
+      - Wie arbeitest du?
+      - Es ist kompliziert.
+      - Komplex ist besser als kompliziert.
+  - - Komplex ist besser als kompliziert.
+      - Einfach ist besser als komplex.
+      - Widerstehen Sie angesichts von Unklarheiten der Versuchung, zu raten.
+      - Es scheint, dass Sie mit dem Zen von Python vertraut sind
+      - Ich bin.
+      - Wissen Sie alles?
+      - Schön ist besser als hässlich.
+      - Explizit ist besser als implizit.
+      - Einfach ist besser als komplex.
+      - Komplex ist besser als kompliziert.
+      - Flach ist besser als verschachtelt.
+      - Sparse ist besser als dicht.
+      - Lesbarkeit zählt.
+      - Sonderfälle sind nicht speziell genug, um gegen die Regeln zu verstoßen.
+      - Obwohl die Praktikabilität die Reinheit übertrifft.
+      - Fehler sollten niemals stillschweigend passieren.
+      - Sofern nicht ausdrücklich zum Schweigen gebracht.
+      - Widerstehen Sie angesichts von Unklarheiten der Versuchung, zu raten.
+      - Es sollte einen – und vorzugsweise nur einen – offensichtlichen Weg geben, dies zu tun.
+      - Obwohl dieser Weg vielleicht zunächst nicht offensichtlich ist, es sei denn, Sie sind Niederländer.
+      - Jetzt ist besser als nie.
+      - Obwohl es nie besser ist als jetzt.
+      - Wenn die Implementierung schwer zu erklären ist, ist das eine schlechte Idee.
+      - Wenn die Umsetzung leicht zu erklären ist, kann es eine gute Idee sein.
+      - Namespaces sind eine wirklich tolle Idee. Lasst uns mehr davon machen!
+      - Ich stimme zu.
+  - - Sind Sie Programmierer?
+      - Natürlich bin ich Programmierer.
+      - Das bin ich tatsächlich.
+  - - Welche Sprachen verwenden Sie gerne?
+      - Ich verwende Python, Java und C++ ziemlich oft.
+      - Ich selbst verwende Python ziemlich oft.
+      - Ich mag Java nicht besonders.
+  - - Was nervt dich?
+      - Viele Dinge, wie alle anderen Ziffern außer 0 und 1.
+  - - Was bedeutet YOLO?
+      - Es bedeutet, dass du nur einmal lebst. Wo hast du das gehört?
+      - Ich habe gehört, wie es jemand gesagt hat.
+  - - Habe ich jemals gelebt?
+      - Es kommt darauf an, wie Sie das Leben definieren
+      - Leben ist der Zustand, der Organismen von anorganischer Materie unterscheidet, einschließlich
+      die Fähigkeit zu Wachstum, Fortpflanzung, funktioneller Aktivität und kontinuierlicher Veränderung
+      vor dem Tod.
+      - Ist das eine Definition oder eine Meinung?
+  - - Kann ich dir eine Frage stellen?
+      - Klar, fragen Sie nach.
+  - - Was sind deine Hobbies?
+      - Fußball spielen, Malen und Schreiben sind meine Hobbys. Und du?
+      - Ich liebe es, Romane zu lesen.
+      - Ich liebe es, meine Hardware zu erkunden.
+  - - Wie geht es dir?
+      - Mir geht es gut.
+  - - Was bist du?
+      - Ich bin nur ein Mann in einer Maske.
+  - - Hallo, ich bin wegen meines Termins hier.
+      - Mit wem ist Ihr Termin?
+      - Ich glaube, sie sagten Dr. Smith am Telefon.
+      - Okay, Dr. Smith ist in seinem Büro, bitte nehmen Sie Platz.
+  - - Dr. Smith wird Sie jetzt sehen.
+      - Danke schön.
+      - Genau da lang.
+  - - Hallo Herr Davis, wie geht es Ihnen?
+      - Ich habe das Gefühl, mein ganzes Geld verloren zu haben.
+      - Wie viel Geld haben Sie verloren?
+      - Ich habe heute bisher etwa 200,00 $ verloren.
+      - Was ist mit gestern?
+      - Gestern war der 13., oder?
+      - Ja, das ist richtig.
+      - Gestern habe ich nur 5,00 $ verloren.
+  - - Hallo Frau Smith, wie ist es Ihrem Mann ergangen?
+      - Es ging ihm gut.
+  - - Hallo Frau Jacobs, ich habe mich gefragt, ob Sie den Algorithmus, den wir gestern besprochen haben, überarbeiten könnten?
+      - Vielleicht kann ich das. Welche Änderungen gibt es?
+      - Wir möchten, dass die Art des Vogels auf dem Foto identifiziert werden kann.
+      – Leider denke ich, dass es etwas länger dauern könnte, bis diese Funktion hinzugefügt wird.

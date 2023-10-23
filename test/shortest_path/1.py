@@ -1,16 +1,19 @@
 import itertools
+
 import networkx as nx
+
 
 def total_weight(graph, path):
     # Function to calculate the total weight of a path
     weight = 0
     for i in range(len(path) - 1):
-        if graph.has_edge(path[i], path[i+1]):
-            weight += graph[path[i]][path[i+1]]['weight']
+        if graph.has_edge(path[i], path[i + 1]):
+            weight += graph[path[i]][path[i + 1]]['weight']
         else:
             # If an edge doesn't exist, return a high weight to discourage this path
             return float('inf')
     return weight
+
 
 def brute_force_tsp(graph, start, end):
     nodes = list(graph.nodes())
@@ -28,6 +31,7 @@ def brute_force_tsp(graph, start, end):
 
     return shortest_path, shortest_length
 
+
 # Create a graph with your nodes and edges
 graph = nx.Graph()
 # Assuming nodes are numbered 0 to n-1 and start node is 0, end node is n-1
@@ -44,6 +48,7 @@ print(f'Shortest Path: {path}')
 print(f'Path Length: {length}')
 
 import matplotlib.pyplot as plt
+
 # plot the graph with weighted edges
 pos = nx.spring_layout(graph)
 nx.draw(graph, pos, with_labels=True)
