@@ -3,9 +3,6 @@ import math
 import numpy as np
 import pandas as pd
 
-# show all columns
-pd.set_option('display.max_columns', None)
-
 
 def tsp(adj_matrix, start, end):
     n = len(adj_matrix)
@@ -52,6 +49,7 @@ def duplicate_nodes(adj_matrix, copies):
     #     print(i, ":", i % n, end="\t")
     return new_matrix
 
+
 def optimize_path(shortest_path, start_node_index, end_node_index, df):
     print("\nOptimizing path...")
     print(shortest_path)
@@ -85,39 +83,7 @@ def optimize_path(shortest_path, start_node_index, end_node_index, df):
     return shortest_path
 
 
-# Optimize the answer
-# def optimize_path(shortest_path, start_node_index, end_node_index, df):
-#     # print("\nOptimizing path...")
-#     # print(shortest_path)
-#     # print(start_node_index, end_node_index)
-#     # # print(df)
-#     #
-#     # # Convert node indices to node IDs
-#     # shortest_path_ids = [df.iloc[node_index % (len(df))]['_id'] for node_index in shortest_path]
-#     #
-#     # # Find the first occurrence of the start_node_id and the last occurrence of the end_node_id
-#     # start_index = shortest_path_ids.index(df.iloc[start_node_index]['_id'])
-#     # end_index = len(shortest_path_ids) - 1 - shortest_path_ids[::-1].index(df.iloc[end_node_index]['_id'])
-#     #
-#     # # Slice the path to only include nodes between the start and end nodes, inclusive
-#     # optimized_path_ids = shortest_path_ids[start_index:end_index + 1]
-#     #
-#     # return optimized_path_ids
-#     i = 0
-#     while i < len(shortest_path) - 1:
-#         if shortest_path[i] == shortest_path[i + 1]:
-#             shortest_path.pop(i)
-#         else:
-#             i += 1
-#
-#     # # break the cycle at current location and destination
-#     # current_index = shortest_path.index(start_id)
-#     # destination_index = shortest_path.index(end_id)
-#     # shortest_path = shortest_path[current_index:destination_index + 1]
-#
-#     return shortest_path
-
-def find_shortest_path(adj_matrix, start_node_id, end_node_id, df):
+def find_shortest_path_tsp(adj_matrix, start_node_id, end_node_id, df):
     start_node_index = df[df['_id'] == start_node_id].index[0]
     end_node_index = df[df['_id'] == end_node_id].index[0]
     print(start_node_index, end_node_index)
@@ -182,10 +148,17 @@ def create_adjacency_matrix(df):
 
 df = pd.read_csv("test_2.csv")
 
-start_node_id = "652b9d229c8deef2485bf8ea" # Independence Square
-end_node_id = "652b9d229c8deef2485bf8e9" # Rideekanda Forest Monastery
+start_lat = 6.927079
+start_lon = 79.861244
+destination_location = "652b9d229c8deef2485bf8e9"
 
-# Usage
+# add start location to the dataframe
+df = pd.concat([df, pd.DataFrame([["start", "Current Location", start_lat, start_lon]],
+                                 columns=['_id', 'name', 'latitude', 'longitude'])], ignore_index=True)
+
+start_node_id = "start"
+end_node_id = destination_location
+
 adj_matrix = create_adjacency_matrix(df)
 shortest_path_length, shortest_path, df = find_shortest_path(adj_matrix, start_node_id, end_node_id, df)
 print(f'Shortest path: {shortest_path}')  # [0, 3, 0, 2, 1, 4]

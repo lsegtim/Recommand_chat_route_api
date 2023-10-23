@@ -17,8 +17,11 @@ from c_en.chatbot import initialize_bot_english, get_response_chatbot_english
 from c_g.chatbot import initialize_bot_german, get_response_chatbot_german
 from c_t.chatbot import initialize_bot_tamil, get_response_chatbot_tamil
 
-from filtering import filter_data, find_shortest_path, sort_by_distance_from_current_location
+from filtering import filter_data
 import json
+
+from nearest_locations import sort_by_distance_from_current_location
+from shortest_path import find_shortest_path
 
 # show all columns
 pd.set_option('display.max_columns', None)
@@ -672,9 +675,6 @@ async def get_nearest_location(nearest_location: NearestLocationModel = Body(...
     current_location = (nearest_location.latitude, nearest_location.longitude)
 
     filtered_data = sort_by_distance_from_current_location(locations, current_location, distance)
-
-    # # keep only _id, name, latitude, longitude
-    # filtered_data = filtered_data[['_id', 'name', 'latitude', 'longitude']]
 
     filtered_data = filtered_data.head(num_of_rec)
 
