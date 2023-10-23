@@ -151,7 +151,8 @@ def find_shortest_path(shortest_path, filtered_data):
 
     # add start location to the dataframe
     filtered_data = pd.concat([filtered_data, pd.DataFrame([["start", "Current Location", start_lat, start_lon]],
-                                                           columns=['_id', 'name', 'latitude', 'longitude'])], ignore_index=True)
+                                                           columns=['_id', 'name', 'latitude', 'longitude'])],
+                              ignore_index=True)
 
     # save csv
     filtered_data.to_csv('filtered_data_2.csv', index=False)
@@ -159,7 +160,8 @@ def find_shortest_path(shortest_path, filtered_data):
     start_node_id = "start"
 
     adj_matrix = create_adjacency_matrix(filtered_data)
-    shortest_path_length, shortest_path, filtered_data = find_shortest_path_tsp(adj_matrix, start_node_id, destination_location, filtered_data)
+    shortest_path_length, shortest_path, filtered_data = find_shortest_path_tsp(adj_matrix, start_node_id,
+                                                                                destination_location, filtered_data)
     print(f'Shortest path: {shortest_path}')
     print(f'Shortest path length: {shortest_path_length}')
 
@@ -167,4 +169,3 @@ def find_shortest_path(shortest_path, filtered_data):
     pd.set_option('display.max_columns', None)
 
     return filtered_data
-

@@ -557,7 +557,7 @@ async def get_chatbot(message: str):
         response = str(get_response_chatbot_tamil(message, chatbot_tamil))
     else:
         response = "Sorry, I don't understand that."
-    return {"response": response}
+    return {"response": response, "language": language}
 
 
 # {
