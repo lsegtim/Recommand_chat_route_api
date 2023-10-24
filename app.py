@@ -53,9 +53,6 @@ chatbot_german, _ = initialize_bot_german()
 chatbot_tamil, _ = initialize_bot_tamil()
 
 
-# print(get_response_chatbot("Hey how are you?", chatbot))
-
-
 class PyObjectId(ObjectId):
     @classmethod
     def __get_validators__(cls):
@@ -265,49 +262,6 @@ async def sign_up(user: UserSignUpModel = Body(...)):
         return {"success": False, "message": "Invalid username or password"}
 
 
-# Authentication: true
-# Username: nilupa
-# Password: nilupa123
-# Latitude: 6.828828828828828
-# Longitude: 79.86386702251839
-# Nearest Landmark: Okada Temple
-# Distance Radius Value: 303.5087719298246
-# Updated Data:
-# Time Restrictions: 7.00AM - 7.00PM
-# Accessibility: Choose an option
-# Historical Contexts: Rock Information
-# Hands-On Activities: Choose an option
-
-
-# class FeedbackModel(BaseModel):
-#     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-#     user_id: PyObjectId = Field(default_factory=PyObjectId)
-#     location_id: PyObjectId = Field(default_factory=PyObjectId)
-#     rating: str = Field(...)
-#     time_restrictions: str = Field(...)
-#     accessibility: str = Field(...)
-#     historical_context: str = Field(...)
-#     hands_on_activities: str = Field(...)
-#     planning: str = Field(...)
-#
-#     class Config:
-#         allow_population_by_field_name = True
-#         arbitrary_types_allowed = True
-#         json_encoders = {ObjectId: str}
-#         schema_extra = {
-#             "example": {
-#                 "_id": "60f4d5c5b5f0f0e5e8b2b5c9",
-#                 "user_id": "60f4d5c5b5f0f0e5e8b2b5c9",
-#                 "location_id": "60f4d5c5b5f0f0e5e8b2b5c9",
-#                 "rating": "view",
-#                 "time_restrictions": "7.00AM - 7.00PM",
-#                 "accessibility": "Wheelchair-accessible car park, Wheelchair-accessible entrance",
-#                 "historical_context": "Ancient Buddhist monastery",
-#                 "hands_on_activities": "Photography, Sightseeing, Relaxing",
-#                 "planning": "Choose an option"
-#             }
-#         }
-
 base_url = "http://localhost:8000/"
 save_path = "data/"
 
@@ -375,47 +329,6 @@ def process_data():
 
     # save to csv
     df.to_csv(save_path + "processed.csv", index=False)
-
-
-#
-# def analyze_data():
-#     # load csv
-#     df = pd.read_csv(save_path + "processed.csv")
-#
-#     # data types
-#     print(df.dtypes)
-#
-#     # null values
-#     print(df.isnull().sum())
-#
-#     # duplicate values
-#     print(df.duplicated().sum())
-#
-#     # unique values
-#     print(df.nunique())
-#
-#     # describe
-#     print(df.describe())
-
-#
-# def pre_process():
-#     # load csv
-#     df = pd.read_csv(save_path + "processed.csv")
-#
-#     # remove column if 75% of the values are null
-#     df.dropna(thresh=len(df) * 0.25, axis=1, inplace=True)
-#
-#     # remove null values
-#     df.dropna(inplace=True)
-#
-#     # remove null values
-#     df.dropna(inplace=True)
-#
-#     # remove duplicate values
-#     df.drop_duplicates(inplace=True)
-#
-#     # save to csv
-#     df.to_csv(save_path + "pre_processed.csv", index=False)
 
 
 def update_log():
@@ -506,41 +419,8 @@ async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
         json_string = json.load(json_file)
 
     return json_string
-    #
-    #
-    #
-    # return {"recommendations": recommendation}
 
 
-# # Load data if last update is more than 1 hour and Recommendation
-# @app.get("/recommendation-load-update/{user_id}")
-# async def get_recommendation_load_update(user_id: str, num_of_rec: int = 5):
-#     if load_log():
-#         users = await list_users()
-#         interactions = await list_interaction()
-#         locations = await list_locations()
-#
-#         users = pd.DataFrame(users)
-#         interactions = pd.DataFrame(interactions)
-#         locations = pd.DataFrame(locations)
-#
-#         users.to_csv(save_path + "users.csv", index=False)
-#         interactions.to_csv(save_path + "interactions.csv", index=False)
-#         locations.to_csv(save_path + "locations.csv", index=False)
-#
-#         aggregate_data()
-#         process_data()
-#         # pre_process()
-#         update_log()
-#
-#     if num_of_rec:
-#         recommendation, user_stat = get_rec(user_id, num_of_rec=num_of_rec)
-#     else:
-#         recommendation, user_stat = get_rec(user_id, num_of_rec=5)
-#     return {"recommendations": recommendation}
-
-
-# Chatbot
 @app.get("/chatbot/{message}")
 async def get_chatbot(message: str):
     # detect language
