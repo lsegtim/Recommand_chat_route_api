@@ -93,3 +93,6 @@ scikit-learn==1.3.1
 nltk==3.8.1
 networkx==3.1
 geopy==2.4.0
+
+PyYAML==6.0.1
+googletrans==4.0.0rc1
