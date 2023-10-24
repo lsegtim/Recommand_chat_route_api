@@ -1,8 +1,9 @@
 import logging
-from chatterbot.storage import StorageAdapter
+
+from chatterbot import utils
 from chatterbot.logic import LogicAdapter
 from chatterbot.search import TextSearch, IndexedTextSearch
-from chatterbot import utils
+from chatterbot.storage import StorageAdapter
 
 
 class ChatBot(object):
@@ -111,7 +112,8 @@ class ChatBot(object):
             input_statement.search_text = self.storage.tagger.get_text_index_string(input_statement.text)
 
         if not input_statement.search_in_response_to and input_statement.in_response_to:
-            input_statement.search_in_response_to = self.storage.tagger.get_text_index_string(input_statement.in_response_to)
+            input_statement.search_in_response_to = self.storage.tagger.get_text_index_string(
+                input_statement.in_response_to)
 
         response = self.generate_response(input_statement, additional_response_selection_parameters)
 
@@ -221,7 +223,7 @@ class ChatBot(object):
 
         previous_statement_text = previous_statement
 
-        if not isinstance(previous_statement, (str, type(None), )):
+        if not isinstance(previous_statement, (str, type(None),)):
             statement.in_response_to = previous_statement.text
         elif isinstance(previous_statement, str):
             statement.in_response_to = previous_statement

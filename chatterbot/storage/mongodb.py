@@ -1,4 +1,5 @@
 import re
+
 from chatterbot.storage import StorageAdapter
 
 
@@ -133,7 +134,7 @@ class MongoDatabaseAdapter(StorageAdapter):
             # Sort so that newer datetimes appear first
             if 'created_at' in order_by:
                 order_by.remove('created_at')
-                mongo_ordering.append(('created_at', pymongo.DESCENDING, ))
+                mongo_ordering.append(('created_at', pymongo.DESCENDING,))
 
             for order in order_by:
                 mongo_ordering.append((order, pymongo.ASCENDING))

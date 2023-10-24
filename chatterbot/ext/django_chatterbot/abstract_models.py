@@ -1,9 +1,9 @@
-from chatterbot.conversation import StatementMixin
-from chatterbot import constants
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from django.conf import settings
 
+from chatterbot import constants
+from chatterbot.conversation import StatementMixin
 
 DJANGO_APP_NAME = constants.DEFAULT_DJANGO_APP_NAME
 STATEMENT_MODEL = 'Statement'

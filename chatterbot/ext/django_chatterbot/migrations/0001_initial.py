@@ -1,9 +1,8 @@
-from django.db import migrations, models
 import django.db.models.deletion
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = []
@@ -26,11 +25,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='response',
             name='response',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='django_chatterbot.Statement'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+',
+                                    to='django_chatterbot.Statement'),
         ),
         migrations.AddField(
             model_name='response',
             name='statement',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='in_response_to', to='django_chatterbot.Statement'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='in_response_to',
+                                    to='django_chatterbot.Statement'),
         ),
     ]

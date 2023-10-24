@@ -1,10 +1,10 @@
 from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.ext.declarative import declared_attr, declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from sqlalchemy.ext.declarative import declared_attr, declarative_base
 
-from chatterbot.conversation import StatementMixin
 from chatterbot import constants
+from chatterbot.conversation import StatementMixin
 
 
 class ModelBase(object):
@@ -27,7 +27,6 @@ class ModelBase(object):
 
 
 Base = declarative_base(cls=ModelBase)
-
 
 tag_association_table = Table(
     'tag_association',

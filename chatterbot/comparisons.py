@@ -2,14 +2,14 @@
 This module contains various text-comparison algorithms
 designed to compare one statement to another.
 """
-from chatterbot.exceptions import OptionalDependencyImportError
 from difflib import SequenceMatcher
+
+from chatterbot.exceptions import OptionalDependencyImportError
 
 
 class Comparator:
 
     def __init__(self, language):
-
         self.language = language
 
     def __call__(self, statement_a, statement_b):

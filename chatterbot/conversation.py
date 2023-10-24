@@ -1,6 +1,7 @@
-from pytz import UTC
 from datetime import datetime
+
 from dateutil import parser as date_parser
+from pytz import UTC
 
 
 class StatementMixin(object):

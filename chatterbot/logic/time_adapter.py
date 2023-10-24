@@ -1,7 +1,8 @@
 from datetime import datetime
-from chatterbot.logic import LogicAdapter
+
 from chatterbot.conversation import Statement
 from chatterbot.exceptions import OptionalDependencyImportError
+from chatterbot.logic import LogicAdapter
 
 
 class TimeLogicAdapter(LogicAdapter):
@@ -49,11 +50,11 @@ class TimeLogicAdapter(LogicAdapter):
         ])
 
         labeled_data = (
-            [
-                (name, 0) for name in self.negative
-            ] + [
-                (name, 1) for name in self.positive
-            ]
+                [
+                    (name, 0) for name in self.negative
+                ] + [
+                    (name, 1) for name in self.positive
+                ]
         )
 
         train_set = [

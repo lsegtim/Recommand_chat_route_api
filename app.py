@@ -48,6 +48,7 @@ from recommander import get_rec
 
 chatbot = initialize_bot()
 
+
 class PyObjectId(ObjectId):
     @classmethod
     def __get_validators__(cls):
