@@ -12,9 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from langdetect import detect
 from pydantic import BaseModel, Field
 
-from c_en.chatbot import initialize_bot_english, get_response_chatbot_english
-from c_g.chatbot import initialize_bot_german, get_response_chatbot_german
-from c_t.chatbot import initialize_bot_tamil, get_response_chatbot_tamil
+from chatbot import initialize_bot, get_response_chatbot
 from filtering import filter_data
 from nearest_locations import sort_by_distance_from_current_location
 from shortest_path import find_shortest_path
@@ -48,10 +46,7 @@ data_length = 100000
 
 from recommander import get_rec
 
-chatbot_english, _ = initialize_bot_english()
-chatbot_german, _ = initialize_bot_german()
-chatbot_tamil, _ = initialize_bot_tamil()
-
+chatbot = initialize_bot()
 
 class PyObjectId(ObjectId):
     @classmethod
@@ -425,12 +420,8 @@ async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
 async def get_chatbot(message: str):
     # detect language
     language = detect(message)
-    if language == "en":
-        response = str(get_response_chatbot_english(message, chatbot_english))
-    elif language == "de":
-        response = str(get_response_chatbot_german(message, chatbot_german))
-    elif language == "ta":
-        response = str(get_response_chatbot_tamil(message, chatbot_tamil))
+    if language == "en" or language == "de" or language == "ta":
+        response = str(get_response_chatbot(message, chatbot))
     else:
         response = "Sorry, I don't understand that."
     return {"response": response, "language": language}
