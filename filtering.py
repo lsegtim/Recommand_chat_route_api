@@ -1,11 +1,9 @@
 import math
-import random
 from datetime import time
 
 import pandas as pd
+from bson import ObjectId
 from dateutil.parser import parser
-
-from shortest_path import generate_graph, plot_hamiltonian_cycle
 
 
 def haversine_distance(lat1, lon1, lat2, lon2):
@@ -53,6 +51,8 @@ def check_accessibility(row, accessibility_values, column_to_be_checked='accessi
 
 
 def filter_data(shortest_path, locations):
+    location_temp = locations.copy()
+
     ################################################ Radius ################################################
     # filter locations by radius
     locations = locations[locations.apply(
@@ -114,93 +114,17 @@ def filter_data(shortest_path, locations):
 
         print(locations)
 
+    print("location_count 1", len(locations))
+
+    # convert shortes_path.destination_id to <class 'bson.objectid.ObjectId'>
+    destination_id = ObjectId(shortest_path.destination_id)
+
+    # if destination_id is not in the filtered data
+    if destination_id not in locations['_id'].values:
+        # find the destination location and add it to the filtered data
+        destination_location = location_temp[location_temp['_id'] == destination_id]
+        locations = pd.concat([locations, destination_location])
+
     print("location_count", len(locations))
 
     return locations
-
-
-def sort_cycle_to_start_with_current_location(hamiltonian_cycle):
-    # sort this cycle to always start with 0
-    current_index = hamiltonian_cycle.index(0)
-    hamiltonian_cycle = hamiltonian_cycle[current_index:] + hamiltonian_cycle[:current_index + 1]
-    # remove duplicate nodes in the cycle
-    hamiltonian_cycle = list(dict.fromkeys(hamiltonian_cycle))
-
-    return hamiltonian_cycle
-
-
-def find_shortest_path(shortest_path, filtered_data):
-    # if filtered_data is empty then return empty dataframe
-    if filtered_data.empty:
-        return filtered_data
-
-    # Shortest Path
-    current_location = (shortest_path.latitude, shortest_path.longitude)
-    G, hamiltonian_cycle = generate_graph(current_location, filtered_data)
-    print(hamiltonian_cycle)
-
-    # Sort
-    hamiltonian_cycle = sort_cycle_to_start_with_current_location(hamiltonian_cycle)
-    print(hamiltonian_cycle)
-
-    # show all columns in the dataframe
-    pd.set_option('display.max_columns', None)
-
-    print(filtered_data)
-
-    # Sort dataframe
-    filtered_data = filtered_data.set_index('_id')
-    filtered_data = filtered_data.reindex(hamiltonian_cycle)
-    filtered_data = filtered_data.reset_index()
-
-    # if the _id is 0 then add current location as latitude and longitude and name as "Current Location"
-    filtered_data.loc[filtered_data['_id'] == 0, 'latitude'] = current_location[0]
-    filtered_data.loc[filtered_data['_id'] == 0, 'longitude'] = current_location[1]
-    filtered_data.loc[filtered_data['_id'] == 0, 'name'] = "Current Location"
-
-    print(filtered_data)
-
-    return filtered_data
-
-#
-# locations = pd.read_csv("data/locations.csv")
-#
-# # Not selected
-# shortest_path = {
-#     "user_id": "652b9e279c8deef2485bf90a",
-#     "latitude": 6.91,
-#     "longitude": 79.85,
-#     "destination_id": "652b9d229c8deef2485bf8e8",
-#     "distanceRadiusValue": 50.0,
-#     "updatedData": {
-#         "Time Restrictions": "0.00AM - 0.00PM",
-#         "Accessibility": "Not selected",
-#         "Historical Contexts": "Ancient Buddhist monastery",
-#         "Hands-On Activities": "Photography, Sightseeing, Relaxing"
-#     }
-# }
-#
-# filtered_data = filter_data(shortest_path, locations)
-#
-# # keep only _id, name, latitude, longitude
-# filtered_data = filtered_data[['_id', 'name', 'latitude', 'longitude']]
-#
-# filtered_data = find_shortest_path(shortest_path, filtered_data)
-#
-
-
-def sort_by_distance_from_current_location(filtered_data, current_location, distance):
-    # Calculate distance from current location
-    filtered_data['distance'] = filtered_data.apply(
-        lambda row: haversine_distance(current_location[0], current_location[1], row['latitude'], row['longitude']),
-        axis=1)
-
-    # Sort by distance
-    filtered_data = filtered_data.sort_values(by=['distance'])
-
-    # if distance is 0 then return the filtered data
-    if distance == 0:
-        return filtered_data
-    else:
-        # return distance >= distance
-        return filtered_data[filtered_data['distance'] >= distance]

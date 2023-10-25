@@ -1,3 +1,4 @@
+import json
 import math
 import os
 from datetime import datetime, time
@@ -10,11 +11,13 @@ from bson import ObjectId
 from dateutil.parser import parser
 from fastapi import FastAPI, Request, Body
 from fastapi.middleware.cors import CORSMiddleware
+from langdetect import detect
 from pydantic import BaseModel, Field
 
 from chatbot import initialize_bot, get_response_chatbot
-from filtering import filter_data, find_shortest_path, sort_by_distance_from_current_location
-import json
+from filtering import filter_data
+from nearest_locations import sort_by_distance_from_current_location
+from shortest_path import find_shortest_path
 
 # show all columns
 pd.set_option('display.max_columns', None)
@@ -579,7 +582,7 @@ class ShortestPathModel(BaseModel):
                 "user_id": "652b9e279c8deef2485bf90a",
                 "latitude": 6.91,
                 "longitude": 79.85,
-                "destination_id": "652b9d229c8deef2485bf8e8",
+                "destination_id": "652b9d229c8deef2485bf8e9",
                 "distanceRadiusValue": 50.0,
                 "updatedData": {
                     "Time Restrictions": "0.00AM - 0.00PM",
@@ -599,10 +602,15 @@ async def get_shortest_path(shortest_path: ShortestPathModel = Body(...)):
 
     locations.to_csv(save_path + "locations.csv", index=False)
 
+    # location_backup = locations[['_id', 'name', 'latitude', 'longitude']]
+
     filtered_data = filter_data(shortest_path, locations)
 
     # keep only _id, name, latitude, longitude
     filtered_data = filtered_data[['_id', 'name', 'latitude', 'longitude']]
+
+    # save dataframe
+    filtered_data.to_csv("filtered_data.csv", index=False)
 
     filtered_data = find_shortest_path(shortest_path, filtered_data)
 
@@ -645,9 +653,11 @@ class NearestLocationModel(BaseModel):
             }
         }
 
+
 # Nearest Location by Current Location
 @app.post("/nearest-location")
-async def get_nearest_location(nearest_location: NearestLocationModel = Body(...), num_of_rec: int = 10, distance: float = 0):
+async def get_nearest_location(nearest_location: NearestLocationModel = Body(...), num_of_rec: int = 10,
+                               distance: float = 0):
     locations = await list_locations()
 
     locations = pd.DataFrame(locations)
@@ -657,9 +667,6 @@ async def get_nearest_location(nearest_location: NearestLocationModel = Body(...
     current_location = (nearest_location.latitude, nearest_location.longitude)
 
     filtered_data = sort_by_distance_from_current_location(locations, current_location, distance)
-
-    # # keep only _id, name, latitude, longitude
-    # filtered_data = filtered_data[['_id', 'name', 'latitude', 'longitude']]
 
     filtered_data = filtered_data.head(num_of_rec)
 
