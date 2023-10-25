@@ -59,8 +59,8 @@ def initialize_bot():
 
 
 def get_response_chatbot(query, chatbot):
-    # print("query: ", query)
-    print(chatbot.get_response(query))
+    print("query: ", query)
+    k = chatbot.get_response(query)
     return chatbot.get_response(query)
 
 #

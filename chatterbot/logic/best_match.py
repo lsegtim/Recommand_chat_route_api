@@ -1,5 +1,5 @@
-from chatterbot import filters
 from chatterbot.logic import LogicAdapter
+from chatterbot import filters
 
 
 class BestMatch(LogicAdapter):

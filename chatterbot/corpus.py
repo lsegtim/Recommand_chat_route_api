@@ -1,8 +1,7 @@
-import glob
-import io
 import os
+import io
+import glob
 from pathlib import Path
-
 from chatterbot.exceptions import OptionalDependencyImportError
 
 try:
@@ -14,6 +13,7 @@ except (ImportError, ModuleNotFoundError):
         'chatterbot_corpus',
         'data'
     )
+
 
 CORPUS_EXTENSION = 'yml'
 

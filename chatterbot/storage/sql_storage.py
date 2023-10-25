@@ -239,8 +239,7 @@ class SQLStorageAdapter(StorageAdapter):
                 statement_model_object.search_text = self.tagger.get_text_index_string(statement.text)
 
             if not statement.search_in_response_to and statement.in_response_to:
-                statement_model_object.search_in_response_to = self.tagger.get_text_index_string(
-                    statement.in_response_to)
+                statement_model_object.search_in_response_to = self.tagger.get_text_index_string(statement.in_response_to)
 
             new_tags = set(tag_data) - set(create_tags.keys())
 

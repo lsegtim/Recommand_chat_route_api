@@ -1,13 +1,11 @@
-import csv
 import os
 import sys
+import csv
 import time
-
 from dateutil import parser as date_parser
-
-from chatterbot import utils
 from chatterbot.conversation import Statement
 from chatterbot.tagging import PosLemmaTagger
+from chatterbot import utils
 
 
 class Trainer(object):
@@ -152,6 +150,7 @@ class ChatterBotCorpusTrainer(Trainer):
                 previous_statement_search_text = ''
 
                 for text in conversation:
+
                     statement_search_text = self.chatbot.storage.tagger.get_text_index_string(text)
 
                     statement = Statement(

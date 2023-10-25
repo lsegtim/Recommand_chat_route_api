@@ -1,6 +1,6 @@
 import configparser
-import os
 import sys
+import os
 
 
 def get_chatterbot_version():

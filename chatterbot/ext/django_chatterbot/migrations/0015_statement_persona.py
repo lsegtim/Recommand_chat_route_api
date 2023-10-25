@@ -2,6 +2,7 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('django_chatterbot', '0014_remove_statement_extra_data'),
     ]

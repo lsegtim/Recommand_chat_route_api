@@ -1,6 +1,6 @@
-import calendar
 import re
 from datetime import timedelta, datetime
+import calendar
 
 # Variations of dates that the parser can capture
 year_variations = ['year', 'years', 'yrs']
@@ -66,6 +66,7 @@ NUMBERS = {
     'billion': 1000000000,
     'trillion': 1000000000000,
 }
+
 
 # Mapping of Month name and Value
 HASHMONTHS = {

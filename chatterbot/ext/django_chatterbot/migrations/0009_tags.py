@@ -3,6 +3,7 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('django_chatterbot', '0008_update_conversations'),
     ]

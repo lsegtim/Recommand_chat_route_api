@@ -96,3 +96,6 @@ geopy==2.4.0
 
 PyYAML==6.0.1
 googletrans==4.0.0rc1
+
+
+pymongo.errors.ConfigurationError: The resolution lifetime expired after 21.216 seconds: Server 192.168.8.1 UDP port 53 answered The DNS operation timed out.; Server 192.168.8.1 UDP port 53 answered The DNS operation timed out.; Server 192.168.8.1 UDP port 53 answered The DNS operation timed out.; Server 192.168.8.1 UDP port 53 answered The DNS operation timed out.; Server 192.168.8.1 UDP port 53 answered The DNS operation timed out.; Server 192.168.8.1 UDP port 53 answered The DNS operation timed out.; Server 192.168.8.1 UDP port 53 answered The DNS operation timed out.

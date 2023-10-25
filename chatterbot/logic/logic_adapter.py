@@ -1,7 +1,7 @@
 from chatterbot.adapters import Adapter
-from chatterbot.conversation import Statement
-from chatterbot.search import IndexedTextSearch
 from chatterbot.storage import StorageAdapter
+from chatterbot.search import IndexedTextSearch
+from chatterbot.conversation import Statement
 
 
 class LogicAdapter(Adapter):

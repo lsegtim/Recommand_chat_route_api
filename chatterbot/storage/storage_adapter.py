@@ -1,5 +1,4 @@
 import logging
-
 from chatterbot import languages
 from chatterbot.tagging import PosLemmaTagger
 
