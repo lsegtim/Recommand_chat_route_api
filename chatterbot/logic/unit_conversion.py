@@ -1,8 +1,7 @@
 from chatterbot.logic import LogicAdapter
 from chatterbot.conversation import Statement
 from chatterbot.exceptions import OptionalDependencyImportError
-from chatterbot import languages
-from chatterbot import parsing
+from chatterbot import languages, parsing
 from mathparse import mathparse
 import re
 
@@ -44,8 +43,8 @@ class UnitConversion(LogicAdapter):
                    (?P<number>([+-]?\d+(?:\.\d+)?)|(a|an)|(%s[-\s]?)+)\s+
                    (?P<from>\S+)\s*) # meter, celsius, hours
                    ''' % (parsing.numbers),
-                    (re.VERBOSE | re.IGNORECASE)
-                ),
+                           (re.VERBOSE | re.IGNORECASE)
+                           ),
                 lambda m: self.handle_matches(m)
             ),
             (
@@ -55,8 +54,8 @@ class UnitConversion(LogicAdapter):
                    (to)\s+
                    (?P<target>\S+)\s*) # meter, celsius, hours
                    ''' % (parsing.numbers),
-                    (re.VERBOSE | re.IGNORECASE)
-                ),
+                           (re.VERBOSE | re.IGNORECASE)
+                           ),
                 lambda m: self.handle_matches(m)
             ),
             (
@@ -67,8 +66,8 @@ class UnitConversion(LogicAdapter):
                    (how\s+many)*\s+
                    (?P<target>\S+)\s*) # meter, celsius, hours
                    ''' % (parsing.numbers),
-                    (re.VERBOSE | re.IGNORECASE)
-                ),
+                           (re.VERBOSE | re.IGNORECASE)
+                           ),
                 lambda m: self.handle_matches(m)
             )
         ]

@@ -1,5 +1,6 @@
 from chatterbot.adapters import Adapter
-from chatterbot.storage import StorageAdapter
+from chatterbot.storage.storage_adapter import StorageAdapter
+
 from chatterbot.search import IndexedTextSearch
 from chatterbot.conversation import Statement
 

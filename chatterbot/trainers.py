@@ -273,7 +273,7 @@ class UbuntuCorpusTrainer(Trainer):
             os.makedirs(self.extracted_data_directory)
 
         def track_progress(members):
-            sys.stdout.write('.')
+            sys.stdout.write('')
             for member in members:
                 # This will be the current file being extracted
                 yield member

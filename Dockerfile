@@ -1,13 +1,11 @@
-FROM python:3.11.3
-ENV PYTHONUNBUFFERED True
+FROM python:3.9
 
-RUN pip install --upgrade pip
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r  requirements.txt
+WORKDIR /sentimentApi
 
-ENV APP_HOME /root
-WORKDIR $APP_HOME
-COPY . ./
+COPY ./app/requirements.txt /sentimentApi/requirements.txt
 
-EXPOSE 8080
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+RUN pip install --no-cache-dir --upgrade -r /sentimentApi/requirements.txt
+
+COPY ./app /sentimentApi/app
+
+CMD exec gunicorn --bind :$PORT --workers 1 --worker-class uvicorn.workers.UvicornWorker  --threads 8 app.app:app
