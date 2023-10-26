@@ -18,3 +18,4 @@ nltk==3.8.1
 networkx==3.1
 geopy==2.4.0
 uvicorn
+googletrans==3.1.0a0
