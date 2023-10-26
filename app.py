@@ -9,7 +9,6 @@ import pandas as pd
 from bson import ObjectId
 from fastapi import FastAPI, Request, Body
 from fastapi.middleware.cors import CORSMiddleware
-from langdetect import detect
 from pydantic import BaseModel, Field
 
 from chatbot import initialize_bot, get_response_chatbot
@@ -419,13 +418,13 @@ async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
 
 @app.get("/chatbot/{message}")
 async def get_chatbot(message: str):
-    # detect language
-    language = detect(message)
-    if language == "en" or language == "de" or language == "ta":
-        response = str(get_response_chatbot(message, chatbot))
-    else:
-        response = "Sorry, I don't understand that."
-    return {"response": response, "language": language}
+    # # detect language
+    # # language = detect(message)
+    # if language == "en" or language == "de" or language == "ta":
+    #     response = str(get_response_chatbot(message, chatbot))
+    # else:
+    response = "Sorry, I don't understand that."
+    return {"response": response}
 
 
 # {
