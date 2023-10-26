@@ -9,13 +9,14 @@ import pandas as pd
 from bson import ObjectId
 from fastapi import FastAPI, Request, Body
 from fastapi.middleware.cors import CORSMiddleware
-from langdetect import detect
+from googletrans import Translator
 from pydantic import BaseModel, Field
 
-from chatbot import initialize_bot, get_response_chatbot
 from filtering import filter_data
 from nearest_locations import sort_by_distance_from_current_location
 from shortest_path import find_shortest_path
+
+translator = Translator()
 
 # show all columns
 pd.set_option('display.max_columns', None)
@@ -45,8 +46,6 @@ db = client.histomind
 data_length = 100000
 
 from recommander import get_rec
-
-chatbot = initialize_bot()
 
 
 class PyObjectId(ObjectId):
@@ -415,17 +414,6 @@ async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
         json_string = json.load(json_file)
 
     return json_string
-
-
-@app.get("/chatbot/{message}")
-async def get_chatbot(message: str):
-    # detect language
-    language = detect(message)
-    if language == "en" or language == "de" or language == "ta":
-        response = str(get_response_chatbot(message, chatbot))
-    else:
-        response = "Sorry, I don't understand that."
-    return {"response": response, "language": language}
 
 
 # {
