@@ -53,7 +53,7 @@ data_length = 100000
 
 from recommander import get_rec
 
-chatbot = initialize_bot()
+chatbot, exit_conditions = initialize_bot()
 
 
 class PyObjectId(ObjectId):
