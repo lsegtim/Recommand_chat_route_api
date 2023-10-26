@@ -16,6 +16,9 @@ from filtering import filter_data
 from nearest_locations import sort_by_distance_from_current_location
 from shortest_path import find_shortest_path
 
+from googletrans import Translator
+translator = Translator()
+
 # show all columns
 pd.set_option('display.max_columns', None)
 
@@ -415,6 +418,35 @@ async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
 
     return json_string
 
+
+
+# message: "message"
+# local: "en"
+
+class ChatbotModel(BaseModel):
+    message: str = Field(...)
+    local: str = Field(...)
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+
+        schema_extra = {
+            "example": {
+                "message": "Hallo, wie geht es dir?",
+                "local": "de"
+            }
+        }
+
+
+# Chatbot
+@app.post("/chatterbot")
+async def get_chatterbot(chatbot_model: ChatbotModel = Body(...)):
+    # response = str(translate_message(get_response_chatbot(chatbot_model.message, chatbot)))
+    # response = translate_message_back(response, chatbot_model.local)
+    response = "Hello"
+    return {"response": response}
 
 @app.get("/chatbot/{message}")
 async def get_chatbot(message: str):
