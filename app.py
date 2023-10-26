@@ -15,7 +15,14 @@ from chatbot import initialize_bot, get_response_chatbot
 from filtering import filter_data
 from nearest_locations import sort_by_distance_from_current_location
 from shortest_path import find_shortest_path
-from transalte_message import translate_message, translate_message_back
+from googletrans import Translator
+translator = Translator()
+
+def translate_message(message):
+    return translator.translate(message, dest='en').text
+
+def translate_message_back(message, dest='en'):
+    return translator.translate(message, dest=dest).text
 
 # show all columns
 pd.set_option('display.max_columns', None)
@@ -46,10 +53,7 @@ data_length = 100000
 
 from recommander import get_rec
 
-chatbot, exit_conditions = initialize_bot()
-
-
-# print(get_response_chatbot("Hey how are you?", chatbot))
+chatbot = initialize_bot()
 
 
 class PyObjectId(ObjectId):
