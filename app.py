@@ -8,10 +8,8 @@ from typing import List
 import motor.motor_asyncio
 import pandas as pd
 from bson import ObjectId
-from dateutil.parser import parser
 from fastapi import FastAPI, Request, Body
 from fastapi.middleware.cors import CORSMiddleware
-from langdetect import detect
 from pydantic import BaseModel, Field
 
 from chatbot import initialize_bot, get_response_chatbot
