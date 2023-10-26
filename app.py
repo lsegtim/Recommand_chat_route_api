@@ -9,13 +9,13 @@ import pandas as pd
 from bson import ObjectId
 from fastapi import FastAPI, Request, Body
 from fastapi.middleware.cors import CORSMiddleware
-from langdetect import detect
 from pydantic import BaseModel, Field
 
 from chatbot import initialize_bot, get_response_chatbot
 from filtering import filter_data
 from nearest_locations import sort_by_distance_from_current_location
 from shortest_path import find_shortest_path
+from transalte_message import translate_message, translate_message_back
 
 # show all columns
 pd.set_option('display.max_columns', None)
@@ -46,7 +46,10 @@ data_length = 100000
 
 from recommander import get_rec
 
-chatbot = initialize_bot()
+chatbot, exit_conditions = initialize_bot()
+
+
+# print(get_response_chatbot("Hey how are you?", chatbot))
 
 
 class PyObjectId(ObjectId):
@@ -419,14 +422,37 @@ async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
 
 @app.get("/chatbot/{message}")
 async def get_chatbot(message: str):
-    # detect language
-    language = detect(message)
-    if language == "en" or language == "de" or language == "ta":
-        response = str(get_response_chatbot(message, chatbot))
-    else:
-        response = "Sorry, I don't understand that."
-    return {"response": response, "language": language}
+    response = str(get_response_chatbot(message, chatbot))
+    return {"response": response}
 
+
+# message: "message"
+# local: "en"
+
+class ChatbotModel(BaseModel):
+    message: str = Field(...)
+    local: str = Field(...)
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+
+        schema_extra = {
+            "example": {
+                "message": "Hallo, wie geht es dir?",
+                "local": "de"
+            }
+        }
+
+
+# Chatbot
+@app.post("/chatterbot")
+async def get_chatterbot(chatbot_model: ChatbotModel = Body(...)):
+    response = str(translate_message(get_response_chatbot(chatbot_model.message, chatbot)))
+    response = translate_message_back(response, chatbot_model.local)
+    # response = "Hello"
+    return {"response": response}
 
 # {
 #   authenticated: false,
@@ -475,7 +501,6 @@ class ShortestPathModel(BaseModel):
                 }
             }
         }
-
 
 # Shortest Path
 @app.post("/shortest-path")
@@ -575,5 +600,6 @@ async def get_nearest_location(nearest_location: NearestLocationModel = Body(...
         json_string = json.load(json_file)
 
     return json_string
+
 
 # 652b9e279c8deef2485bf90c
