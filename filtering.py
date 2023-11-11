@@ -32,23 +32,6 @@ def is_within_radius(row, current_latitude, current_longitude, radius):
 
 # Function to convert time string to datetime.time object
 def convert_time_string_to_time(time_string):
-    print(time_string)
-    print(time_string)
-    print(time_string)
-    print(time_string)
-    print(time_string)
-    print(time_string)
-    print(time_string)
-    print(time_string)
-    print(time_string)
-    print(time_string)
-    print(time_string)
-    print(time_string)
-    print(time_string)
-    print(time_string)
-    print(time_string)
-    print(time_string)
-    print(time_string)
     # convert time string to string
     time_string = str(time_string)
     # parse time string to time
