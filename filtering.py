@@ -8,6 +8,11 @@ from dateutil.parser import parser
 
 def haversine_distance(lat1, lon1, lat2, lon2):
     r = 6371000  # Radius of the Earth in meters
+    # convert coordinates from strings to floats
+    lat1 = float(lat1)
+    lon1 = float(lon1)
+    lat2 = float(lat2)
+    lon2 = float(lon2)
     phi1 = math.radians(lat1)
     phi2 = math.radians(lat2)
     delta_phi = math.radians(lat2 - lat1)
@@ -27,6 +32,25 @@ def is_within_radius(row, current_latitude, current_longitude, radius):
 
 # Function to convert time string to datetime.time object
 def convert_time_string_to_time(time_string):
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    print(time_string)
+    # convert time string to string
+    time_string = str(time_string)
     # parse time string to time
     return parser().parse(time_string).time()
 
